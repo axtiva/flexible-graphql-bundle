@@ -1,0 +1,7 @@
+flexible_graphql:
+  namespace: App\GraphQL
+  dir: '%kernel.project_dir%/src/GraphQL/'
+  schema_type: graphql
+  schema_file: '%kernel.project_dir%/config/graphql/*.graphql'
+  enable_preload: false
+  default_resolver: flexible_graphql.default_resolver

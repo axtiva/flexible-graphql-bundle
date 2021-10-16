@@ -1,0 +1,22 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Axtiva\FlexibleGraphqlBundle\Resolver\DefaultResolver:
+    arguments:
+      $propertyAccessor: '@flexible_graphql.property_accessor'
+  flexible_graphql.default_resolver:
+    alias: 'Axtiva\FlexibleGraphqlBundle\Resolver\DefaultResolver'
+    public: true
+
+  flexible_graphql.property_accessor_builder:
+    class: Symfony\Component\PropertyAccess\PropertyAccessorBuilder
+    calls:
+      - disableExceptionOnInvalidIndex: []
+      - disableExceptionOnInvalidPropertyPath: []
+
+  flexible_graphql.property_accessor:
+    class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
+    factory: ['@flexible_graphql.property_accessor_builder', 'getPropertyAccessor']
+

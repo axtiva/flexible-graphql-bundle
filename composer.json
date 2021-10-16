@@ -1,0 +1,29 @@
+{
+  "name": "axtiva/flexible-graphql-bundle",
+  "description": "Schema first bundle for generate php code from graphql sdl to TypeRegistry with webonyx/graphql-php for symfony framework",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "bpteam",
+      "email": "bpteam22@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Axtiva\\FlexibleGraphqlBundle\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "axtiva/flexible-graphql-php": "^0.1",
+    "axtiva/flexible-graphql-federation": "^0.1",
+    "axtiva/graphql-federation-extension": "^0.1",
+    "symfony/config": "^4.4 | ^5.0",
+    "symfony/dependency-injection": "^4.4 | ^5.0",
+    "symfony/framework-bundle": "^4.4 | ^5.0",
+    "symfony/property-access": "^4.4 | ^5.0"
+  },
+  "require-dev": {
+    "symfony/console": "^4.4 || ^5.0"
+  }
+}

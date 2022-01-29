@@ -18,7 +18,6 @@ use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGenerato
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Federation\Resolver\Foundation\Query\_EntitiesResolver;
 use Axtiva\FlexibleGraphql\Federation\Resolver\Foundation\Query\_ServiceResolver;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Generator\Config\CodeGeneratorConfigInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\FieldResolverGeneratorConfigInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\CodeGeneratorConfig;
@@ -28,17 +27,14 @@ use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\UnionResolveTypeInterface;
 use Axtiva\FlexibleGraphql\Federation\Resolver\FederationRepresentationResolverInterface;
-use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use Axtiva\FlexibleGraphqlBundle\CacheWarmer\SchemaCacheWarmer;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateDirectiveResolverCommand;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateFieldResolverCommand;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateScalarResolverCommand;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateTypeRegistryCommand;
-use GraphQL\Language\Printer;
-use ReflectionClass;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -58,7 +54,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
 
     private array $config;
 
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         return new Configuration();
     }

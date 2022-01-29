@@ -29,12 +29,12 @@ class SchemaCacheWarmer implements CacheWarmerInterface
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
-    public function isOptional()
+    public function isOptional(): bool
     {
         return false;
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir): array
     {
         $classes = [];
         $schema = SchemaBuilder::build($this->schemaFiles);

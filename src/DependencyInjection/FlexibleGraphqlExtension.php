@@ -156,16 +156,16 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     {
         $container->register(CodeGeneratorConfigInterface::class)
             ->setClass(CodeGeneratorConfig::class)
-            ->setArgument('$namespace', $config['namespace'])
-            ->setArgument('$dir', $config['dir']);
+            ->setArgument('$dir', $config['dir'])
+            ->setArgument('$phpVersion', $config['template_language_version'])
+            ->setArgument('$namespace', $config['namespace']);
     }
 
     private function registerTypeRegistryGenerator(array $config, ContainerBuilder $container): void
     {
         $container->register(TypeRegistryGeneratorBuilderInterface::class)
             ->setClass(TypeRegistryGeneratorBuilder::class)
-            ->setArgument('$namespace', $config['namespace'])
-            ->setArgument('$dir', $config['dir']);
+            ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
         $container->setAlias(
             'flexible_graphql.type_registry_generator.builder',
             TypeRegistryGeneratorBuilderInterface::class
@@ -176,8 +176,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     {
         $codeGenerator = $container->register(CodeGeneratorBuilderInterface::class)
             ->setClass(CodeGeneratorBuilder::class)
-            ->setArgument('$namespace', $config['namespace'])
-            ->setArgument('$dir', $config['dir']);
+            ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
 
         if ($config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
             $container->register(FieldResolverGeneratorConfigInterface::class)

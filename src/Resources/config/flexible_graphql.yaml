@@ -5,3 +5,4 @@ flexible_graphql:
   schema_files: '%kernel.project_dir%/config/graphql/*.graphql'
   enable_preload: false
   default_resolver: flexible_graphql.default_resolver
+  template_language_version: '7.4'

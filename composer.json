@@ -14,16 +14,17 @@
     }
   },
   "require": {
-    "php": ">=7.4",
-    "axtiva/flexible-graphql-php": "^0.2",
-    "axtiva/flexible-graphql-federation": "^0.2",
-    "axtiva/graphql-federation-extension": "^0.1",
+    "php": "^7.4 | ^8.0",
+    "axtiva/flexible-graphql-php": "^1.0",
+    "axtiva/flexible-graphql-federation": "^0.3",
+    "axtiva/graphql-federation-extension": "^1.0",
     "symfony/config": "^4.4 | ^5.0 | ^6.0",
     "symfony/dependency-injection": "^4.4 | ^5.0 | ^6.0",
     "symfony/framework-bundle": "^4.4 | ^5.0 | ^6.0",
     "symfony/property-access": "^4.4 | ^5.0 | ^6.0"
   },
   "require-dev": {
-    "symfony/console": "^4.4 | ^5.0 | ^6.0"
+    "symfony/console": "^4.4 | ^5.0 | ^6.0",
+    "phpunit/phpunit": "^9.5"
   }
 }

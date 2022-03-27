@@ -82,7 +82,7 @@ class Configuration implements ConfigurationInterface
         $node = $treeBuilder->getRootNode();
 
         $node
-            ->info('Full path to schema sdl files like schema.graphql or glob template')
+            ->info('Full path to schema sdl files like /path/to/schema.graphql or glob template')
             ->defaultValue('%kernel.project_dir%/config/graphql/*.graphql')
             ->isRequired()
         ->end();

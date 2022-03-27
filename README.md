@@ -2,6 +2,9 @@
 
 Symfony bundle for Flexible Graphql PHP
 
+- SDL first code generation
+- Fast integration to any project without breaking changes
+- Lazy loading on schema definition
 - Support symfony native opcache preload file generation
 
 # Setup

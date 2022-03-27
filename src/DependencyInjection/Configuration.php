@@ -28,16 +28,21 @@ class Configuration implements ConfigurationInterface
                 ->append($this->schemaFile())
                 ->append($this->enablePreload())
                 ->append($this->defaultResolver())
-                ->append($this->addRequiredScalar(
+                ->append($this->addScalar(
                     'namespace',
                     'App\GraphQL',
                     'Root namespace for generated code'
+                )->isRequired())
+                ->append($this->addScalar(
+                    'template_language_version',
+                    '7.4',
+                    'PHP version of templates for php code'
                 ))
-                ->append($this->addRequiredScalar(
+                ->append($this->addScalar(
                     'dir',
                     '%kernel.project_dir%/src/GraphQL/',
                     'Root dir for generated code'
-                ))
+                )->isRequired())
             ->end();
 
         return $treeBuilder;
@@ -104,7 +109,7 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    private function addRequiredScalar(string $name, $default = null, string $info = null): ScalarNodeDefinition
+    private function addScalar(string $name, $default = null, string $info = null): ScalarNodeDefinition
     {
         $builder = new TreeBuilder($name, 'scalar');
 
@@ -118,10 +123,6 @@ class Configuration implements ConfigurationInterface
         if (isset($default)) {
             $node->defaultValue($default);
         }
-
-        $node
-            ->isRequired()
-        ->end();
 
         return $node;
     }

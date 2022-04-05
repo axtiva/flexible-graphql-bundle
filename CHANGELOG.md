@@ -1,3 +1,7 @@
+1.0.2
+
+- Upgrade base lib with bug fixing
+
 1.0.1
 
 - Upgrade base lib with bug fixing

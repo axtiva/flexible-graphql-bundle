@@ -1,3 +1,8 @@
+1.0.4
+
+- Upgrade base lib with bug fixing
+- Fix generator commands for iterable generators
+
 1.0.3
 
 - Upgrade base lib with bug fixing

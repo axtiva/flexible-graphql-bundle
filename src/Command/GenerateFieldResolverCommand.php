@@ -63,9 +63,10 @@ class GenerateFieldResolverCommand extends Command
             return Command::FAILURE;
         }
 
-        $code = $codeGenerator->generateFieldResolver($type, $field, $schema);
         $io->success('Field resolver generated');
-        $io->writeln($code->getFilename());
+        foreach ($codeGenerator->generateFieldResolver($type, $field, $schema) as $code) {
+            $io->writeln($code->getFilename());
+        }
 
         return Command::SUCCESS;
     }

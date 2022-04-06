@@ -56,9 +56,11 @@ class GenerateDirectiveResolverCommand extends Command
             $io->error('Directive did not found in schema ' . $directiveName);
             return Command::FAILURE;
         }
-        $code = $codeGenerator->generateDirectiveResolver($directive, $schema);
+
         $io->success('Directive resolver generated');
-        $io->writeln($code->getFilename());
+        foreach($codeGenerator->generateDirectiveResolver($directive, $schema) as $code) {
+            $io->writeln($code->getFilename());
+        }
 
         return Command::SUCCESS;
     }

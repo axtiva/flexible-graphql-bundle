@@ -8,7 +8,7 @@ Open example project [axtiva/example-integration/FlexibleGraphqlBundle](https://
 
 ## Composer install in your Symfony app
 
-```
+```shell
 composer require axtiva/flexible-graphql-bundle
 ```
 
@@ -27,10 +27,17 @@ flexible_graphql:
   default_resolver: flexible_graphql.default_resolver # default resolver if it does not defined
 ```
 
-## Run type registry code generation
+## Define container as service
 
+```yaml
+services:
+  Psr\Container\ContainerInterface: '@service_container'
 ```
-bin/console flexible_graphql:generate-type-registry
+
+## Run code generation with warmup command
+
+```shell
+bin/console cache:clear
 ```
 
 ## Create GraphQL Controller
@@ -71,7 +78,9 @@ class GraphqlController extends AbstractController
         $this->httpFactory = $httpFactory;
     }
 
-    #[Route('/graphql', name: 'graphql')]
+    /**
+     * @Route("/graphql", name="graphql")
+     */
     public function index(Request $request): Response
     {
         $typeRegistry = $this->typeRegistry;
@@ -107,3 +116,5 @@ class GraphqlController extends AbstractController
     }
 }
 ```
+
+And start querying data by route `/graphql`

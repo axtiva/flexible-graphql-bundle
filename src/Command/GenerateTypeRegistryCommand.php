@@ -37,7 +37,7 @@ class GenerateTypeRegistryCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('generate type registry')
+            ->setDescription('generate type registry class for lazy load schema')
         ;
     }
 

@@ -1,17 +1,21 @@
 # Axtiva Flexible Graphql Bundle
 
-Symfony bundle for Flexible Graphql PHP
+Symfony bundle for [Flexible Graphql PHP](https://github.com/axtiva/flexible-graphql-php) for fast implementation graphql api
+
+## Features
 
 - SDL first code generation
 - Fast integration to any project without breaking changes
 - Lazy loading on schema definition
+- Apollo Federation Support
+- Executable directives
 - Support symfony native opcache preload file generation
 
 # Setup
 
 Composer install:
 
-```
+```shell
 composer require axtiva/flexible-graphql-bundle
 ```
 
@@ -28,26 +32,24 @@ flexible_graphql:
   default_resolver: flexible_graphql.default_resolver # default resolver if it does not defined
 ```
 
-Generate models and type registry:
+Run command
 
 ```shell
-bin/console flexible_graphql:generate-type-registry
+bin/console cache:clear
 ```
 
-Generate Directive resolver for executable directives:
+Look at flexible_graphql.dir created files.
+
+## Quick install
+
+Quick install [guide](docs/index.md)
+
+## Example integration
+
+Look at example project [axtiva/example-integration/FlexibleGraphqlBundle](https://github.com/axtiva/example-integration/tree/master/FlexibleGraphqlBundle)
+
+## Supported commands
 
 ```shell
-bin/console flexible_graphql:generate-directive-resolver directive_name
-```
-
-Generate Field Resolver:
-
-```shell
-bin/console flexible_graphql:generate-field-resolver type_name field_name
-```
-
-Generate Scalar Resolver:
-
-```shell
-bin/console flexible_graphql:generate-scalar-resolver scalar_name
+bin/console list flexible_graphql
 ```

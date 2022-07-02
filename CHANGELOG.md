@@ -1,3 +1,8 @@
+1.0.5
+
+- Upgrade base lib with bug fixing
+- Update docs
+
 1.0.4
 
 - Upgrade base lib with bug fixing

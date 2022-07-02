@@ -35,7 +35,7 @@ class GenerateScalarResolverCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('generate scalar resolver')
+            ->setDescription('generate custom scalar resolver')
             ->addArgument('custom_scalar_name', InputArgument::REQUIRED, 'name of custom scalar in sdl schema')
         ;
     }

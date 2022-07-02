@@ -35,7 +35,7 @@ class GenerateDirectiveResolverCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('generate directive resolver')
+            ->setDescription('generate executive directive resolver')
             ->addArgument('directive_name', InputArgument::REQUIRED, 'name of directive in sdl schema')
         ;
     }

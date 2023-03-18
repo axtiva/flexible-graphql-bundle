@@ -39,7 +39,9 @@ class SchemaCacheWarmer implements CacheWarmerInterface
         $classes = [];
         $schema = SchemaBuilder::build($this->schemaFiles);
         if ($this->schemaType === 'federation') {
-            $schema = FederationV22SchemaExtender::build($schema);
+            foreach (SchemaBuilder::getSchemaAst($this->schemaFiles) as $ast) {
+                $schema = FederationV22SchemaExtender::build($schema, $ast);
+            }
         }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         foreach ($codeGenerator->generateAllTypes($schema) as $code){

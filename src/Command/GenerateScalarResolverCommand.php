@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Axtiva\FlexibleGraphqlBundle\Command;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use GraphQL\Type\Definition\CustomScalarType;
 use Symfony\Component\Console\Command\Command;
@@ -45,9 +44,6 @@ class GenerateScalarResolverCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
-        if ($this->schemaType === 'federation') {
-            $schema = FederationSchemaExtender::build($schema);
-        }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         /** @var CustomScalarType $scalar */
         $scalarName = $input->getArgument('custom_scalar_name');

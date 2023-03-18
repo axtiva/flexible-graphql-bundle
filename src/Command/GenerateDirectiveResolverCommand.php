@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Axtiva\FlexibleGraphqlBundle\Command;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use GraphQL\Type\Definition\Directive;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +17,6 @@ class GenerateDirectiveResolverCommand extends Command
 {
     protected static $defaultName = 'flexible_graphql:generate-directive-resolver';
     private string $schemaFiles;
-    private string $schemaType;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
@@ -45,9 +43,6 @@ class GenerateDirectiveResolverCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
-        if ($this->schemaType === 'federation') {
-            $schema = FederationSchemaExtender::build($schema);
-        }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         /** @var Directive $directive */
         $directiveName = $input->getArgument('directive_name');

@@ -6,27 +6,19 @@ namespace Axtiva\FlexibleGraphqlBundle\DependencyInjection;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilder;
-use Axtiva\FlexibleGraphql\Federation\Generator\Config\FederationRepresentationResolverGeneratorConfigInterface;
-use Axtiva\FlexibleGraphql\Federation\Generator\Config\Foundation\Psr4\FederationRepresentationResolverGeneratorConfig;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\FederationRepresentationResolverGeneratorInterface;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\_EntitiesResolverGenerator;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\_ServiceResolverGenerator;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\FederationRepresentationResolverGenerator;
-use Axtiva\FlexibleGraphql\Federation\Resolver\_EntitiesResolverInterface;
-use Axtiva\FlexibleGraphql\Federation\Resolver\_ServiceResolverInterface;
+use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilder;
+use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\Federation\Resolver\Foundation\Query\_EntitiesResolver;
-use Axtiva\FlexibleGraphql\Federation\Resolver\Foundation\Query\_ServiceResolver;
 use Axtiva\FlexibleGraphql\Generator\Config\CodeGeneratorConfigInterface;
-use Axtiva\FlexibleGraphql\Generator\Config\FieldResolverGeneratorConfigInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\CodeGeneratorConfig;
-use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\FieldResolverGeneratorConfig;
+use Axtiva\FlexibleGraphql\Resolver\_EntitiesResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\_ServiceResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\CustomScalarResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\FederationRepresentationResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\UnionResolveTypeInterface;
-use Axtiva\FlexibleGraphql\Federation\Resolver\FederationRepresentationResolverInterface;
 use Axtiva\FlexibleGraphqlBundle\CacheWarmer\SchemaCacheWarmer;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateDirectiveResolverCommand;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateFieldResolverCommand;
@@ -163,50 +155,35 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
 
     private function registerTypeRegistryGenerator(array $config, ContainerBuilder $container): void
     {
-        $container->register(TypeRegistryGeneratorBuilderInterface::class)
-            ->setClass(TypeRegistryGeneratorBuilder::class)
-            ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
-        $container->setAlias(
-            'flexible_graphql.type_registry_generator.builder',
-            TypeRegistryGeneratorBuilderInterface::class
-        );
+        if ($config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
+            $container->register(TypeRegistryGeneratorBuilderInterface::class)
+                ->setClass(TypeRegistryGeneratorBuilderFederated::class)
+                ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
+            $container->setAlias(
+                'flexible_graphql.type_registry_generator.builder',
+                TypeRegistryGeneratorBuilderFederated::class
+            );
+        } else {
+            $container->register(TypeRegistryGeneratorBuilderInterface::class)
+                ->setClass(TypeRegistryGeneratorBuilder::class)
+                ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
+            $container->setAlias(
+                'flexible_graphql.type_registry_generator.builder',
+                TypeRegistryGeneratorBuilderInterface::class
+            );
+        }
     }
 
     private function registerCodeGenerator(array $config, ContainerBuilder $container): void
     {
-        $codeGenerator = $container->register(CodeGeneratorBuilderInterface::class)
-            ->setClass(CodeGeneratorBuilder::class)
-            ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
-
         if ($config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
-            $container->register(FieldResolverGeneratorConfigInterface::class)
-                ->setClass(FieldResolverGeneratorConfig::class)
+            $container->register(CodeGeneratorBuilderInterface::class)
+                ->setClass(CodeGeneratorBuilderFederated::class)
                 ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
-
-            $container->register(_EntitiesResolverGenerator::class)
-                ->setArgument('$config', new Reference(FieldResolverGeneratorConfigInterface::class));
-            $codeGenerator->addMethodCall('addFieldResolverGenerator', [
-                new Reference(_EntitiesResolverGenerator::class),
-            ]);
-
-            $container->register(_ServiceResolverGenerator::class)
-                ->setArgument('$config', new Reference(FieldResolverGeneratorConfigInterface::class));
-            $codeGenerator->addMethodCall('addFieldResolverGenerator', [
-                new Reference(_ServiceResolverGenerator::class),
-            ]);
-
-            $container->register(FederationRepresentationResolverGeneratorConfigInterface::class)
-                ->setClass(FederationRepresentationResolverGeneratorConfig::class)
+        } else {
+            $container->register(CodeGeneratorBuilderInterface::class)
+                ->setClass(CodeGeneratorBuilder::class)
                 ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
-            $container->register(FederationRepresentationResolverGeneratorInterface::class)
-                ->setClass(FederationRepresentationResolverGenerator::class)
-                ->setArgument(
-                    '$config',
-                    new Reference(FederationRepresentationResolverGeneratorConfigInterface::class)
-                );
-            $codeGenerator->addMethodCall('addModelGenerator', [
-                new Reference(FederationRepresentationResolverGeneratorInterface::class),
-            ]);
         }
     }
 
@@ -259,7 +236,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
             foreach ($services as $serviceId) {
                 $definition = $container->getDefinition($serviceId);
                 $reflection = $container->getReflectionClass($serviceId, false);
-                if ($reflection && $reflection->isSubclassOf(_EntitiesResolver::class)) {
+                if ($reflection && $reflection->isSubclassOf(_EntitiesResolverInterface::class)) {
                     $definition->setArguments($representations);
                 }
             }
@@ -270,7 +247,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
             foreach ($services as $serviceId) {
                 $definition = $container->getDefinition($serviceId);
                 $reflection = $container->getReflectionClass($serviceId, false);
-                if ($reflection && $reflection->isSubclassOf(_ServiceResolver::class)) {
+                if ($reflection && $reflection->isSubclassOf(_ServiceResolverInterface::class)) {
                     $schema = '';
                     foreach (glob($config['schema_files']) as $fsElement) {
                         if (is_file($fsElement)) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Axtiva\FlexibleGraphqlBundle\Command;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
 use Symfony\Component\Console\Command\Command;
@@ -46,9 +45,6 @@ class GenerateTypeRegistryCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
-        if ($this->schemaType === 'federation') {
-            $schema = FederationSchemaExtender::build($schema);
-        }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         foreach ($codeGenerator->generateAllTypes($schema) as $code) {
             $io->writeln($code->getFilename());

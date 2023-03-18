@@ -15,9 +15,7 @@
   },
   "require": {
     "php": "^7.4 | ^8.0",
-    "axtiva/flexible-graphql-php": "^1.1",
-    "axtiva/flexible-graphql-federation": "^1.0",
-    "axtiva/graphql-federation-extension": "^1.0.1",
+    "axtiva/flexible-graphql-php": "v2.0.0-alpha",
     "symfony/config": "^4.4 | ^5.0 | ^6.0",
     "symfony/dependency-injection": "^4.4 | ^5.0 | ^6.0",
     "symfony/framework-bundle": "^4.4 | ^5.0 | ^6.0",

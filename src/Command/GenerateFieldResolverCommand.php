@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Axtiva\FlexibleGraphqlBundle\Command;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use GraphQL\Type\Definition\ObjectType;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +17,6 @@ class GenerateFieldResolverCommand extends Command
 {
     protected static $defaultName = 'flexible_graphql:generate-field-resolver';
     private string $schemaFiles;
-    private string $schemaType;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
@@ -46,9 +44,6 @@ class GenerateFieldResolverCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
-        if ($this->schemaType === 'federation') {
-            $schema = FederationSchemaExtender::build($schema);
-        }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         $typeName = $input->getArgument('type_name');
         $fieldName = $input->getArgument('field_name');

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Axtiva\FlexibleGraphqlBundle\CacheWarmer;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
+use Axtiva\FlexibleGraphql\Utils\FederationV22SchemaExtender;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -39,7 +39,7 @@ class SchemaCacheWarmer implements CacheWarmerInterface
         $classes = [];
         $schema = SchemaBuilder::build($this->schemaFiles);
         if ($this->schemaType === 'federation') {
-            $schema = FederationSchemaExtender::build($schema);
+            $schema = FederationV22SchemaExtender::build($schema);
         }
         $codeGenerator = $this->codeGeneratorBuilder->build();
         foreach ($codeGenerator->generateAllTypes($schema) as $code){

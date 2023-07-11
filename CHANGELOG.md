@@ -1,3 +1,9 @@
+2.1.0
+
+- Upgrade base lib
+- Add support amphp v3
+- Add support amphp v2
+
 2.0.0
 
 - Upgrade base lib

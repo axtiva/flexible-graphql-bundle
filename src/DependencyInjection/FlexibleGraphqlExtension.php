@@ -8,6 +8,8 @@ use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilder;
 use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilder;
+use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderAmphp;
+use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderAmphpV2;
 use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\CodeGeneratorConfigInterface;
@@ -155,23 +157,32 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
 
     private function registerTypeRegistryGenerator(array $config, ContainerBuilder $container): void
     {
-        if ($config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
-            $container->register(TypeRegistryGeneratorBuilderInterface::class)
-                ->setClass(TypeRegistryGeneratorBuilderFederated::class)
-                ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
+        $baseTypeRegistryClass = $config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION
+            ? TypeRegistryGeneratorBuilderFederated::class
+            : TypeRegistryGeneratorBuilder::class
+        ;
+        $container->register($baseTypeRegistryClass)
+            ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
+
+        if ($config['operation'] === Configuration::OPERATION_TYPE_SYNC) {
             $container->setAlias(
-                'flexible_graphql.type_registry_generator.builder',
-                TypeRegistryGeneratorBuilderFederated::class
+                TypeRegistryGeneratorBuilderInterface::class,
+                $baseTypeRegistryClass
             );
-        } else {
+        } elseif($config['operation'] === Configuration::OPERATION_TYPE_ASYNC_AMPHPV2) {
             $container->register(TypeRegistryGeneratorBuilderInterface::class)
-                ->setClass(TypeRegistryGeneratorBuilder::class)
-                ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
-            $container->setAlias(
-                'flexible_graphql.type_registry_generator.builder',
-                TypeRegistryGeneratorBuilderInterface::class
-            );
+                ->setClass(TypeRegistryGeneratorBuilderAmphpV2::class)
+                ->setArgument('$baseBuilder', new Reference($baseTypeRegistryClass));
+        } elseif($config['operation'] === Configuration::OPERATION_TYPE_ASYNC_AMPHPV3) {
+            $container->register(TypeRegistryGeneratorBuilderInterface::class)
+                ->setClass(TypeRegistryGeneratorBuilderAmphp::class)
+                ->setArgument('$baseBuilder', new Reference($baseTypeRegistryClass));
         }
+
+        $container->setAlias(
+            'flexible_graphql.type_registry_generator.builder',
+            TypeRegistryGeneratorBuilderInterface::class
+        );
     }
 
     private function registerCodeGenerator(array $config, ContainerBuilder $container): void

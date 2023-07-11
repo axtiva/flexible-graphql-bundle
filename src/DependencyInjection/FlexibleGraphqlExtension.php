@@ -164,16 +164,16 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         $container->register($baseTypeRegistryClass)
             ->setArgument('$config', new Reference(CodeGeneratorConfigInterface::class));
 
-        if ($config['operation'] === Configuration::EXECUTOR_TYPE_SYNC) {
+        if ($config['executor'] === Configuration::EXECUTOR_TYPE_SYNC) {
             $container->setAlias(
                 TypeRegistryGeneratorBuilderInterface::class,
                 $baseTypeRegistryClass
             );
-        } elseif($config['operation'] === Configuration::EXECUTOR_TYPE_ASYNC_AMPHPV2) {
+        } elseif($config['executor'] === Configuration::EXECUTOR_TYPE_ASYNC_AMPHPV2) {
             $container->register(TypeRegistryGeneratorBuilderInterface::class)
                 ->setClass(TypeRegistryGeneratorBuilderAmphpV2::class)
                 ->setArgument('$baseBuilder', new Reference($baseTypeRegistryClass));
-        } elseif($config['operation'] === Configuration::EXECUTOR_TYPE_ASYNC_AMPHPV3) {
+        } elseif($config['executor'] === Configuration::EXECUTOR_TYPE_ASYNC_AMPHPV3) {
             $container->register(TypeRegistryGeneratorBuilderInterface::class)
                 ->setClass(TypeRegistryGeneratorBuilderAmphp::class)
                 ->setArgument('$baseBuilder', new Reference($baseTypeRegistryClass));

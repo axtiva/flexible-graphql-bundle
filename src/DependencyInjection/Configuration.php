@@ -14,9 +14,9 @@ class Configuration implements ConfigurationInterface
 {
     public const SCHEMA_TYPE_FEDERATION = 'federation';
     public const SCHEMA_TYPE_GRAPHQL = 'graphql';
-    public const OPERATION_TYPE_SYNC = 'sync';
-    public const OPERATION_TYPE_ASYNC_AMPHPV2 = 'amphp_v2';
-    public const OPERATION_TYPE_ASYNC_AMPHPV3 = 'amphp_v3';
+    public const EXECUTOR_TYPE_SYNC = 'sync';
+    public const EXECUTOR_TYPE_ASYNC_AMPHPV2 = 'amphp_v2';
+    public const EXECUTOR_TYPE_ASYNC_AMPHPV3 = 'amphp_v3';
     public const NAME = 'flexible_graphql';
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -70,15 +70,15 @@ class Configuration implements ConfigurationInterface
 
     private function operationType(): ScalarNodeDefinition
     {
-        $treeBuilder = new TreeBuilder('operation', 'enum');
+        $treeBuilder = new TreeBuilder('executor', 'enum');
 
         /** @var EnumNodeDefinition $node */
         $node = $treeBuilder->getRootNode();
 
         $node
-            ->values([self::OPERATION_TYPE_SYNC, self::OPERATION_TYPE_ASYNC_AMPHPV2, self::OPERATION_TYPE_ASYNC_AMPHPV3])
-            ->info('Select operation type for graphql execution')
-            ->defaultValue(self::OPERATION_TYPE_SYNC)
+            ->values([self::EXECUTOR_TYPE_SYNC, self::EXECUTOR_TYPE_ASYNC_AMPHPV2, self::EXECUTOR_TYPE_ASYNC_AMPHPV3])
+            ->info('Select executor type for graphql operations')
+            ->defaultValue(self::EXECUTOR_TYPE_SYNC)
         ->end();
 
         return $node;

@@ -1,3 +1,7 @@
+2.2.0
+
+- Add support symfony v7
+
 2.1.0
 
 - Upgrade base lib

@@ -7,12 +7,14 @@ namespace Axtiva\FlexibleGraphqlBundle\Command;
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Utils\SchemaBuilder;
 use GraphQL\Type\Definition\CustomScalarType;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'flexible_graphql:generate-scalar-resolver')]
 class GenerateScalarResolverCommand extends Command
 {
     protected static $defaultName = 'flexible_graphql:generate-scalar-resolver';

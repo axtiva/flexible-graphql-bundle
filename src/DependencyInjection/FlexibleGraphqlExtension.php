@@ -54,7 +54,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -70,6 +70,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         $this->registerCommands($config, $container);
     }
 
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         $this->registerResolvers($this->config, $container);

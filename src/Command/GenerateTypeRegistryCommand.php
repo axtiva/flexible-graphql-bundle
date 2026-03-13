@@ -16,21 +16,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-type-registry')]
 class GenerateTypeRegistryCommand extends Command
 {
-    protected static $defaultName = 'flexible_graphql:generate-type-registry';
+    protected static ?string $defaultName = 'flexible_graphql:generate-type-registry';
     private string $schemaFiles;
-    private string $schemaType;
     private TypeRegistryGeneratorBuilderInterface $typeRegistryGeneratorBuilder;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
         string $schemaFiles,
-        string $schemaType,
         TypeRegistryGeneratorBuilderInterface $typeRegistryGeneratorBuilder,
         CodeGeneratorBuilderInterface $codeGeneratorBuilder
     ) {
         parent::__construct();
         $this->schemaFiles = $schemaFiles;
-        $this->schemaType = $schemaType;
         $this->typeRegistryGeneratorBuilder = $typeRegistryGeneratorBuilder;
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }

@@ -17,19 +17,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-scalar-resolver')]
 class GenerateScalarResolverCommand extends Command
 {
-    protected static $defaultName = 'flexible_graphql:generate-scalar-resolver';
+    protected static ?string $defaultName = 'flexible_graphql:generate-scalar-resolver';
     private string $schemaFiles;
-    private string $schemaType;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
         string $schemaFiles,
-        string $schemaType,
         CodeGeneratorBuilderInterface $codeGeneratorBuilder
     ) {
         parent::__construct();
         $this->schemaFiles = $schemaFiles;
-        $this->schemaType = $schemaType;
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
@@ -47,10 +44,9 @@ class GenerateScalarResolverCommand extends Command
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
         $codeGenerator = $this->codeGeneratorBuilder->build();
-        /** @var CustomScalarType $scalar */
         $scalarName = $input->getArgument('custom_scalar_name');
         $scalar = $schema->getType($scalarName);
-        if (empty($scalar)) {
+        if (! $scalar instanceof CustomScalarType) {
             $io->error('Scalar did not found in schema ' . $scalarName);
             return Command::FAILURE;
         }

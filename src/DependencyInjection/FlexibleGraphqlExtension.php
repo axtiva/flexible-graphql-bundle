@@ -46,8 +46,12 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     public const _ENTITIES_RESOLVER_TAG = 'flexible_graphql._entities_resolver';
     public const FEDERATION_REPRESENTATION_RESOLVER_TAG = 'flexible_graphql.federation_representation_resolver';
 
+    /** @var array<string, mixed> */
     private array $config;
 
+    /**
+     * @param array<mixed> $config
+     */
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         return new Configuration();
@@ -56,7 +60,10 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     /**
      * @return void
      */
-    public function load(array $configs, ContainerBuilder $container)
+    /**
+     * @param array<array<mixed>> $configs
+     */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $yamlLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $yamlLoader->load('services.yaml');
@@ -73,7 +80,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     /**
      * @return void
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->registerResolvers($this->config, $container);
         if ($this->config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
@@ -86,7 +93,10 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         return Configuration::NAME;
     }
 
-    private function registerResolvers(array $config, ContainerBuilder $container)
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function registerResolvers(array $config, ContainerBuilder $container): void
     {
         if (!file_exists($config['dir'])) {
             mkdir($config['dir'], 0755, true);
@@ -137,6 +147,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         }
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function setCompilerCacheWarmer(array $config, ContainerBuilder $container): void
     {
         $container->register(SchemaCacheWarmer::class)
@@ -149,6 +162,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
             ->addTag('kernel.cache_warmer', ['priority' => 50]);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function registerConfigGenerator(array $config, ContainerBuilder $container): void
     {
         $container->register(CodeGeneratorConfigInterface::class)
@@ -158,6 +174,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
             ->setArgument('$namespace', $config['namespace']);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function registerTypeRegistryGenerator(array $config, ContainerBuilder $container): void
     {
         $baseTypeRegistryClass = $config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION
@@ -188,6 +207,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         );
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function registerCodeGenerator(array $config, ContainerBuilder $container): void
     {
         if ($config['schema_type'] === Configuration::SCHEMA_TYPE_FEDERATION) {
@@ -201,12 +223,14 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         }
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function registerCommands(array $config, ContainerBuilder $container): void
     {
         $container->register(GenerateTypeRegistryCommand::class)
             ->setArguments([
                 $config['schema_files'],
-                $config['schema_type'],
                 new Reference(TypeRegistryGeneratorBuilderInterface::class),
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
@@ -215,7 +239,6 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         $container->register(GenerateDirectiveResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
-                $config['schema_type'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
             ->addTag('console.command', ['command' => GenerateDirectiveResolverCommand::getDefaultName()]);
@@ -223,7 +246,6 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         $container->register(GenerateFieldResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
-                $config['schema_type'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
             ->addTag('console.command', ['command' => GenerateFieldResolverCommand::getDefaultName()]);
@@ -231,12 +253,14 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
         $container->register(GenerateScalarResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
-                $config['schema_type'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
             ->addTag('console.command', ['command' => GenerateScalarResolverCommand::getDefaultName()]);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function registerRepresentationResolver(array $config, ContainerBuilder $container): void
     {
         if ($container->findTaggedServiceIds(self::_ENTITIES_RESOLVER_TAG)) {
@@ -265,7 +289,10 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
                     $schema = '';
                     foreach (glob($config['schema_files']) as $fsElement) {
                         if (is_file($fsElement)) {
-                            $schema .= file_get_contents($fsElement) . PHP_EOL;
+                            $content = file_get_contents($fsElement);
+                            if ($content !== false) {
+                                $schema .= $content . PHP_EOL;
+                            }
                         }
                     }
                     $definition->setArgument('$graphqlSchemaSDL', $schema);

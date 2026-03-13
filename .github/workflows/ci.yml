@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -29,9 +28,6 @@ jobs:
       - name: Install Symfony matrix dependencies
         run: composer update --no-interaction --prefer-dist --with-all-dependencies symfony/*:${{ matrix.symfony-version }}
 
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse -c phpstan.neon.dist
-
       - name: Run PHPUnit
         run: vendor/bin/phpunit -c phpunit.xml.dist  --coverage-text
 
@@ -40,3 +36,6 @@ jobs:
 
       - name: Fixture app type registry generation
         run: php tests/fixture-app/bin/console flexible_graphql:generate-type-registry --env=test --no-interaction
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse -c phpstan.neon.dist

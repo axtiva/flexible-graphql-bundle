@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Controller\GraphqlController;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -37,5 +38,8 @@ final class Kernel extends BaseKernel
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
+        $routes->add('app_graphql', '/graphql')
+            ->controller(GraphqlController::class)
+            ->methods(['POST']);
     }
 }

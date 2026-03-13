@@ -17,7 +17,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-scalar-resolver')]
 class GenerateScalarResolverCommand extends Command
 {
-    protected static ?string $defaultName = 'flexible_graphql:generate-scalar-resolver';
     private string $schemaFiles;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 

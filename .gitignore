@@ -1,3 +1,9 @@
 .idea
 vendor
 composer.lock
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache
+docs/retro.md
+docs/plan
+var

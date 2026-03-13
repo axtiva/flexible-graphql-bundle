@@ -1,0 +1,459 @@
+{
+  "default_read_sequence": [
+    "docs/index/overview.json",
+    "docs/index/workspaces.json",
+    "docs/index/reference-guides.json",
+    "docs/index/task-recipes.json"
+  ],
+  "lazy_traversal_rules": [
+    "Read index.json, docs/index/index.json, and this file before any repository scan.",
+    "Prefer reference-guides.json path targets over broad directory scans.",
+    "Read skills-registry.json before loading any full skill content.",
+    "Before editing, read change-impact.json and testing.json for minimal validation scope.",
+    "Treat this repository as a bundle consumed by another Symfony app unless evidence in the task says otherwise."
+  ],
+  "fallback_scan_policy": {
+    "rule": "Do not broad-scan before reading index files.",
+    "scan_only_after": [
+      "docs/index/index.json",
+      "docs/index/navigation.json",
+      "intent-specific shards",
+      "targeted reference paths from docs/index/reference-guides.json"
+    ],
+    "scan_priority": [
+      "Paths listed in read_first and likely_touchpoints fields",
+      "Paths named in change-impact.json likely_related_paths",
+      "Framework bootstrap or command files named in reference-guides.json"
+    ],
+    "avoid": [
+      ".git/",
+      ".next/",
+      ".venv/",
+      "__pycache__/",
+      "build/",
+      "coverage/",
+      "dist/",
+      "node_modules/",
+      "public/build/",
+      "target/",
+      "vendor/",
+      "venv/"
+    ]
+  },
+  "execution_aware_routing": {
+    "before_code_changes": [
+      "docs/index/change-impact.json",
+      "docs/index/testing.json"
+    ],
+    "before_command_execution": [
+      "docs/index/commands.json",
+      "docs/index/workflows.json"
+    ],
+    "before_skill_selection": [
+      "docs/index/skills-registry.json",
+      "docs/index/reference-guides.json"
+    ],
+    "bundle_specific_guardrails": [
+      "Stop early when the requested surface is an in-repo UI or mobile app; those workspaces are not present.",
+      "Prefer consumer-app validation commands over repo-local execution because this package is not a standalone Symfony app."
+    ]
+  },
+  "intent_routes": {
+    "add_backend_feature": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json",
+        "docs/index/entrypoints.json",
+        "docs/index/task-recipes.json",
+        "docs/index/reference-guides.json",
+        "docs/index/change-impact.json",
+        "docs/index/testing.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json",
+        "docs/index/task-recipes.json"
+      ],
+      "recipe_ids": [
+        "recipe.add-cli-codegen-command",
+        "recipe.change-config-contract",
+        "recipe.change-service-wiring",
+        "recipe.update-integration-entrypoint"
+      ],
+      "preferred_reference_kinds": [
+        "framework-core",
+        "config",
+        "repository-doc"
+      ],
+      "prechecks": [
+        "Confirm whether the request targets this bundle or a separate consuming Symfony app.",
+        "Check entrypoints.json to see whether the requested backend surface is CLI/integration rather than an in-repo HTTP controller.",
+        "Check task-recipes.json unsupported_topics before planning endpoint or persistence work."
+      ],
+      "common_pitfalls": [
+        "Assuming this repository contains a runnable GraphQL HTTP server.",
+        "Changing configuration defaults without syncing bundled sample YAML and docs.",
+        "Relying on FlexibleGraphqlExtension::process() without checking compiler-pass registration implications."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/task-recipes.json",
+        "docs/index/reference-guides.json"
+      ],
+      "optional_followups": [
+        "docs/index/framework-guides.json",
+        "docs/index/skills-registry.json"
+      ],
+      "stop_conditions": [
+        "Stop when the requested feature is confirmed to belong to a consuming app rather than this bundle.",
+        "Stop when the relevant bundle module and touchpoints are identified."
+      ]
+    },
+    "change_mobile_feature": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json"
+      ],
+      "recipe_ids": [],
+      "preferred_reference_kinds": [],
+      "prechecks": [
+        "Check workspaces.json for a mobile workspace before reading source files."
+      ],
+      "common_pitfalls": [
+        "This repository does not contain an in-repo mobile workspace."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/workspaces.json"
+      ],
+      "optional_followups": [],
+      "stop_conditions": [
+        "Stop after confirming mobile workspace is Not found."
+      ]
+    },
+    "change_ui_feature": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json"
+      ],
+      "recipe_ids": [],
+      "preferred_reference_kinds": [],
+      "prechecks": [
+        "Check workspaces.json for a UI workspace before reading source files."
+      ],
+      "common_pitfalls": [
+        "This repository does not contain an in-repo UI workspace."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/workspaces.json"
+      ],
+      "optional_followups": [],
+      "stop_conditions": [
+        "Stop after confirming UI workspace is Not found."
+      ]
+    },
+    "choose_relevant_skills": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/skills-registry.json",
+        "docs/index/modules.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/overview.json",
+        "docs/index/skills-registry.json"
+      ],
+      "recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.change-service-wiring",
+        "recipe.update-default-resolver"
+      ],
+      "preferred_reference_kinds": [
+        "framework-core",
+        "config",
+        "repository-doc"
+      ],
+      "prechecks": [
+        "Use skills-registry.json only after confirming the requested task maps to a present module or documented consumer workflow.",
+        "Prefer narrow PHP/Symfony/GraphQL skills over generic language skills."
+      ],
+      "common_pitfalls": [
+        "Loading frontend or mobile skills for a PHP bundle task.",
+        "Ignoring read_before_using references tied to the chosen skill."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/skills-registry.json",
+        "docs/index/reference-guides.json"
+      ],
+      "optional_followups": [
+        "docs/index/framework-guides.json"
+      ],
+      "stop_conditions": [
+        "Stop when one or two high-applicability skills and their prerequisite references are selected."
+      ]
+    },
+    "identify_entrypoints": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/entrypoints.json",
+        "docs/index/runtime-surfaces.json",
+        "docs/index/reference-guides.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/entrypoints.json"
+      ],
+      "recipe_ids": [
+        "recipe.update-integration-entrypoint"
+      ],
+      "preferred_reference_kinds": [
+        "entrypoint",
+        "framework-core",
+        "repository-doc"
+      ],
+      "prechecks": [
+        "Distinguish code entrypoints from documentation-only consumer examples.",
+        "Check runtime-surfaces.json to understand whether the entrypoint is CLI, cache warm, or documented HTTP usage."
+      ],
+      "common_pitfalls": [
+        "Treating docs/index.md controller example as in-repo executable code.",
+        "Skipping bundle extension and cache warmer entrypoints because they are not HTTP handlers."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/entrypoints.json",
+        "docs/index/reference-guides.json"
+      ],
+      "optional_followups": [
+        "docs/index/architecture.json"
+      ],
+      "stop_conditions": [
+        "Stop when all relevant surface-specific entrypoints are enumerated for the task."
+      ]
+    },
+    "implement_user_story": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/workspaces.json",
+        "docs/index/modules.json",
+        "docs/index/task-recipes.json",
+        "docs/index/reference-guides.json",
+        "docs/index/change-impact.json",
+        "docs/index/testing.json",
+        "docs/index/commands.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/overview.json",
+        "docs/index/modules.json",
+        "docs/index/task-recipes.json"
+      ],
+      "recipe_ids": [
+        "recipe.add-cli-codegen-command",
+        "recipe.change-config-contract",
+        "recipe.change-service-wiring",
+        "recipe.update-default-resolver",
+        "recipe.update-integration-entrypoint"
+      ],
+      "preferred_reference_kinds": [
+        "framework-core",
+        "config",
+        "repository-doc"
+      ],
+      "prechecks": [
+        "Confirm the story targets bundle internals, documented consumer setup, or a missing surface.",
+        "Use modules.json to identify the smallest relevant module set before scanning files.",
+        "Read testing.json before planning validation."
+      ],
+      "common_pitfalls": [
+        "Assuming repo-local tests or CI are available.",
+        "Changing command/config contracts without updating docs and default sample YAML.",
+        "Broad-scanning src/ before reading the high-signal references."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/reference-guides.json",
+        "docs/index/change-impact.json"
+      ],
+      "optional_followups": [
+        "docs/index/framework-guides.json",
+        "docs/index/skills-registry.json"
+      ],
+      "stop_conditions": [
+        "Stop when a matching recipe and minimal touchpoint set are identified.",
+        "Stop early when the request maps to a missing UI/mobile/persistence surface."
+      ]
+    },
+    "investigate_config": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/configs.json",
+        "docs/index/architecture.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json",
+        "docs/index/change-impact.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/configs.json",
+        "docs/index/reference-guides.json"
+      ],
+      "recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.debug-generation-runtime-flow"
+      ],
+      "preferred_reference_kinds": [
+        "config",
+        "framework-core",
+        "repository-doc"
+      ],
+      "prechecks": [
+        "Compare Configuration.php defaults with bundled sample YAML and docs.",
+        "Check whether the config question concerns consumer-app paths such as schema_files or dir."
+      ],
+      "common_pitfalls": [
+        "Assuming docs and config defaults are already synchronized.",
+        "Ignoring executor and schema_type branches in FlexibleGraphqlExtension."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/configs.json",
+        "docs/index/reference-guides.json"
+      ],
+      "optional_followups": [
+        "docs/index/framework-guides.json"
+      ],
+      "stop_conditions": [
+        "Stop when the config source of truth and all affected docs/code touchpoints are identified."
+      ]
+    },
+    "plan_testing_scope": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/testing.json",
+        "docs/index/change-impact.json",
+        "docs/index/commands.json",
+        "docs/index/reference-guides.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/testing.json",
+        "docs/index/change-impact.json"
+      ],
+      "recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.update-integration-entrypoint"
+      ],
+      "preferred_reference_kinds": [
+        "test",
+        "config",
+        "framework-core"
+      ],
+      "prechecks": [
+        "Check whether repo-local automated tests are present before promising them.",
+        "Use change-impact.json to limit validation to affected commands/config/docs."
+      ],
+      "common_pitfalls": [
+        "Assuming PHPUnit dependency implies current test files exist.",
+        "Using repo-local execution when validation actually requires a consuming Symfony app."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/testing.json",
+        "docs/index/change-impact.json"
+      ],
+      "optional_followups": [
+        "docs/index/workflows.json"
+      ],
+      "stop_conditions": [
+        "Stop when the minimal validation scope and any missing-coverage caveats are explicit."
+      ]
+    },
+    "run_build_or_tests": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/commands.json",
+        "docs/index/testing.json",
+        "docs/index/workflows.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/commands.json",
+        "docs/index/testing.json"
+      ],
+      "recipe_ids": [
+        "recipe.debug-generation-runtime-flow"
+      ],
+      "preferred_reference_kinds": [
+        "build-script",
+        "repository-doc",
+        "framework-core"
+      ],
+      "prechecks": [
+        "Check commands.json category_index for build/lint/test gaps.",
+        "Check workflows.json to see which commands are consumer-app workflows rather than repo-local scripts."
+      ],
+      "common_pitfalls": [
+        "Trying to run bin/console commands inside the bundle repo without a host Symfony app.",
+        "Assuming build, lint, or test scripts are defined in composer.json."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/commands.json",
+        "docs/index/workflows.json"
+      ],
+      "optional_followups": [
+        "docs/index/reference-guides.json"
+      ],
+      "stop_conditions": [
+        "Stop when available commands and missing local automation are both explicit."
+      ]
+    },
+    "trace_runtime_flow": {
+      "read_sequence": [
+        "docs/index/overview.json",
+        "docs/index/architecture.json",
+        "docs/index/entrypoints.json",
+        "docs/index/runtime-surfaces.json",
+        "docs/index/reference-guides.json",
+        "docs/index/change-impact.json"
+      ],
+      "minimum_required_shards": [
+        "docs/index/architecture.json",
+        "docs/index/entrypoints.json"
+      ],
+      "recipe_ids": [
+        "recipe.debug-generation-runtime-flow",
+        "recipe.update-integration-entrypoint"
+      ],
+      "preferred_reference_kinds": [
+        "entrypoint",
+        "framework-core",
+        "config"
+      ],
+      "prechecks": [
+        "Determine whether the flow starts from consumer docs, CLI commands, or Symfony cache warm.",
+        "Check runtime-surfaces.json for the nearest surface rather than scanning src/ top to bottom."
+      ],
+      "common_pitfalls": [
+        "Skipping the extension load() path that wires commands and cache warmer.",
+        "Confusing documented consumer HTTP flow with repo-local executable code."
+      ],
+      "do_not_broad_scan_until": [
+        "docs/index/entrypoints.json",
+        "docs/index/runtime-surfaces.json"
+      ],
+      "optional_followups": [
+        "docs/index/framework-guides.json",
+        "docs/index/skills-registry.json"
+      ],
+      "stop_conditions": [
+        "Stop when the relevant entrypoint chain and generated-file outputs are identified."
+      ]
+    }
+  },
+  "evidence": [
+    "AGENTS.md",
+    "README.md",
+    "composer.json",
+    "docs/index.md",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php"
+  ]
+}

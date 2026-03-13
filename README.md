@@ -44,10 +44,6 @@ Look at flexible_graphql.dir created files.
 
 Quick install [guide](docs/index.md)
 
-## Example integration
-
-Look at example project [axtiva/example-integration/FlexibleGraphqlBundle](https://github.com/axtiva/example-integration/tree/master/FlexibleGraphqlBundle)
-
 ## Supported commands
 
 ```shell

@@ -1,0 +1,214 @@
+{
+  "http": [
+    {
+      "surface_id": "rs.http.consumer-doc-example",
+      "type": "http",
+      "entrypoint_ids": [
+        "ep.http.consumer-doc-example-graphql-controller"
+      ],
+      "key_configs": [
+        "cfg.bundle.user-config-contract",
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "key_commands": [],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "HTTP handling is shown only as a consumer-app documentation example, not as executable code in this repository.",
+        "Read docs/index.md before assuming any in-repo controller exists."
+      ],
+      "evidence": [
+        "docs/index.md",
+        "README.md"
+      ]
+    }
+  ],
+  "cli": [
+    {
+      "surface_id": "rs.cli.codegen",
+      "type": "cli",
+      "entrypoint_ids": [
+        "ep.cli.generate-directive-resolver",
+        "ep.cli.generate-field-resolver",
+        "ep.cli.generate-scalar-resolver",
+        "ep.cli.generate-type-registry"
+      ],
+      "key_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.list-flexible-graphql"
+      ],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "Commands run through a consuming Symfony application's bin/console.",
+        "All generator commands depend on schema_files and generation target dir being configured by the consumer app."
+      ],
+      "evidence": [
+        "README.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "background": [
+    {
+      "surface_id": "rs.background.cache-warm",
+      "type": "background",
+      "entrypoint_ids": [
+        "ep.background.schema-cache-warmer"
+      ],
+      "key_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "SchemaCacheWarmer runs during Symfony cache warm and writes generated GraphQL artifacts into the consumer's configured dir.",
+        "Federation mode adds schema extension work before code generation."
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "scheduler": "Not found",
+  "migrations": "Not found",
+  "ci": "Not found",
+  "docker": "Not found",
+  "local_dev": [
+    {
+      "surface_id": "rs.local-dev.consumer-setup",
+      "type": "local_dev",
+      "entrypoint_ids": [],
+      "key_configs": [
+        "cfg.bundle.manifest",
+        "cfg.bundle.sample-flexible-graphql-doc",
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [
+        "cmd.repo.composer-install-deps",
+        "cmd.consumer.cache-clear",
+        "cmd.consumer.list-flexible-graphql"
+      ],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "Local setup evidence covers package installation and consumer-app configuration snippets, not a full standalone dev stack for this repository.",
+        "The repository itself does not include bin/console, docker, or CI files."
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "composer.json"
+      ]
+    }
+  ],
+  "deployment": [
+    {
+      "surface_id": "rs.deployment.preload-aware-generated-code",
+      "type": "deployment",
+      "entrypoint_ids": [
+        "ep.background.schema-cache-warmer"
+      ],
+      "key_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "README.md cites support for Symfony native opcache preload file generation, and config exposes enable_preload, but no in-repo preload integration code beyond the config option was found.",
+        "Treat preload behavior as consumer-app dependent."
+      ],
+      "evidence": [
+        "README.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    }
+  ],
+  "integration": [
+    {
+      "surface_id": "rs.integration.bundle-config-load",
+      "type": "integration",
+      "entrypoint_ids": [
+        "ep.integration.bundle-extension-load"
+      ],
+      "key_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "This is the main in-repo integration surface: load() wires services, commands, and cache warmer based on processed configuration.",
+        "Read this before changing command availability, builder selection, or generation-time services."
+      ],
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml"
+      ]
+    },
+    {
+      "surface_id": "rs.integration.bundle-compiler-pass",
+      "type": "integration",
+      "entrypoint_ids": [
+        "ep.integration.bundle-extension-process"
+      ],
+      "key_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "key_commands": [],
+      "related_workspaces": [
+        "ws.bundle-core"
+      ],
+      "operational_notes": [
+        "process() contains resolver tagging and federation representation injection logic, but no local evidence confirms it is registered as a compiler pass by the bundle class.",
+        "Treat changes here as reduced-confidence until consumer integration is verified."
+      ],
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    }
+  ],
+  "evidence": [
+    "README.md",
+    "docs/index.md",
+    "composer.json",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/FlexibleGraphqlBundle.php",
+    "src/Resources/config/flexible_graphql.yaml",
+    "src/Resources/config/services.yaml"
+  ]
+}

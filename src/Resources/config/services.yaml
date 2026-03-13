@@ -3,9 +3,50 @@ services:
     autowire: true
     autoconfigure: true
 
+  _instanceof:
+    Axtiva\FlexibleGraphql\Resolver\ResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql.resolver' }
+        - { name: 'flexible_graphql.type_registry.service' }
+
+    Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql.directive_resolver' }
+        - { name: 'flexible_graphql.type_registry.service' }
+
+    Axtiva\FlexibleGraphql\Resolver\CustomScalarResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql.scalar_resolver' }
+        - { name: 'flexible_graphql.type_registry.service' }
+
+    Axtiva\FlexibleGraphql\Resolver\UnionResolveTypeInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql.union_type_resolver' }
+        - { name: 'flexible_graphql.type_registry.service' }
+
+    Axtiva\FlexibleGraphql\Resolver\FederationRepresentationResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql.federation_representation_resolver' }
+
+    Axtiva\FlexibleGraphql\Resolver\_ServiceResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql._service_resolver' }
+
+    Axtiva\FlexibleGraphql\Resolver\_EntitiesResolverInterface:
+      public: true
+      tags:
+        - { name: 'flexible_graphql._entities_resolver' }
+
   Axtiva\FlexibleGraphqlBundle\Resolver\DefaultResolver:
     arguments:
       $propertyAccessor: '@flexible_graphql.property_accessor'
+
   flexible_graphql.default_resolver:
     alias: 'Axtiva\FlexibleGraphqlBundle\Resolver\DefaultResolver'
     public: true
@@ -20,3 +61,9 @@ services:
     class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
     factory: ['@flexible_graphql.property_accessor_builder', 'getPropertyAccessor']
 
+  flexible_graphql.type_registry.service_locator:
+    class: Symfony\Component\DependencyInjection\ServiceLocator
+    tags: ['container.service_locator']
+    arguments:
+      - !tagged_iterator { tag: 'flexible_graphql.type_registry.service', index_by: 'service_id' }
+    public: true

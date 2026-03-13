@@ -1,0 +1,182 @@
+{
+  "workflows": [
+    {
+      "id": "wf.consumer.install-bundle",
+      "name": "Install bundle into a Symfony app",
+      "goal": "Add the package to a host Symfony application so bundle services and commands become available.",
+      "prerequisites": [
+        "Consumer app uses Composer.",
+        "Consumer app is a Symfony application."
+      ],
+      "commands": [
+        "composer require axtiva/flexible-graphql-bundle"
+      ],
+      "expected_outcomes": [
+        "Bundle dependency is installed in the consumer app.",
+        "Consumer can proceed to add flexible_graphql configuration."
+      ],
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.doc.setup-guide",
+        "ref.doc.quick-install"
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md"
+      ]
+    },
+    {
+      "id": "wf.consumer.configure-bundle",
+      "name": "Add flexible_graphql configuration",
+      "goal": "Configure namespace, output dir, schema type, schema files, preload behavior, and default resolver in a consumer app.",
+      "prerequisites": [
+        "Bundle installed in the consumer app."
+      ],
+      "commands": [],
+      "expected_outcomes": [
+        "Consumer app has a flexible_graphql config block aligned with bundle expectations."
+      ],
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.framework.configuration",
+        "ref.config.sample-yaml",
+        "ref.doc.setup-guide",
+        "ref.doc.quick-install"
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "id": "wf.consumer.refresh-generated-code-via-cache-clear",
+      "name": "Refresh generated GraphQL code via cache warm",
+      "goal": "Trigger SchemaCacheWarmer to regenerate GraphQL artifacts in the consumer target directory.",
+      "prerequisites": [
+        "Consumer app configured with flexible_graphql.",
+        "schema_files resolves to real SDL files.",
+        "Generated target dir is writable."
+      ],
+      "commands": [
+        "bin/console cache:clear"
+      ],
+      "expected_outcomes": [
+        "Schema is built from SDL.",
+        "Generated type classes are refreshed.",
+        "TypeRegistry file is written into the configured dir."
+      ],
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.runtime.cache-warmer",
+        "ref.framework.extension",
+        "ref.doc.setup-guide",
+        "ref.doc.quick-install"
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "wf.consumer.generate-type-registry",
+      "name": "Generate type registry explicitly",
+      "goal": "Run direct code generation without relying on cache warm.",
+      "prerequisites": [
+        "Consumer app bin/console available.",
+        "Bundle configured in the consumer app."
+      ],
+      "commands": [
+        "bin/console flexible_graphql:generate-type-registry"
+      ],
+      "expected_outcomes": [
+        "All type classes are generated.",
+        "TypeRegistry file is written and its filename is printed."
+      ],
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.command.generate-type-registry",
+        "ref.framework.extension"
+      ],
+      "evidence": [
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "wf.consumer.list-commands",
+      "name": "List bundle console commands",
+      "goal": "Verify command registration and discover available flexible_graphql commands.",
+      "prerequisites": [
+        "Consumer app bin/console available.",
+        "Bundle installed and registered."
+      ],
+      "commands": [
+        "bin/console list flexible_graphql"
+      ],
+      "expected_outcomes": [
+        "The flexible_graphql command namespace appears in the Symfony console output."
+      ],
+      "safe_to_run_local": false,
+      "mutates_state": false,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.doc.setup-guide",
+        "ref.framework.extension"
+      ],
+      "evidence": [
+        "README.md",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "wf.repo.install-dependencies",
+      "name": "Install repository dependencies locally",
+      "goal": "Prepare local vendor dependencies for repository development or deeper inspection.",
+      "prerequisites": [
+        "Composer available locally."
+      ],
+      "commands": [
+        "composer install"
+      ],
+      "expected_outcomes": [
+        "Dependencies from composer.json are installed under vendor/."
+      ],
+      "safe_to_run_local": true,
+      "mutates_state": true,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [
+        "ref.doc.setup-guide"
+      ],
+      "evidence": [
+        "composer.json"
+      ]
+    },
+    {
+      "id": "wf.repo.run-tests",
+      "name": "Run repository tests",
+      "goal": "Not found",
+      "prerequisites": "Not found",
+      "commands": "Not found",
+      "expected_outcomes": "Not found",
+      "safe_to_run_local": false,
+      "mutates_state": false,
+      "workspace_scope": "ws.bundle-core",
+      "related_reference_ids": [],
+      "evidence": [
+        "composer.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "inferred_style": "Single-package Symfony bundle with DI extension, cache warmer, and CLI generator entrypoints; runtime behavior executes inside a consuming Symfony application.",
+  "layers": [
+    {
+      "id": "layer.docs-consumer-contract",
+      "name": "Consumer contract and docs",
+      "paths": [
+        "README.md",
+        "docs/index.md",
+        "CHANGELOG.md"
+      ],
+      "responsibility": "Explains install, configuration, host-app controller usage, and supported versions.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "CHANGELOG.md"
+      ]
+    },
+    {
+      "id": "layer.bundle-config-and-wiring",
+      "name": "Config tree and service wiring",
+      "paths": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml",
+        "src/FlexibleGraphqlBundle.php"
+      ],
+      "responsibility": "Defines supported options, selects builders based on schema_type and executor, registers commands, cache warmer, aliases, and service tags.",
+      "evidence": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    },
+    {
+      "id": "layer.codegen-runtime",
+      "name": "GraphQL code generation runtime",
+      "paths": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ],
+      "responsibility": "Builds schema from SDL, optionally extends federation schema, generates types/resolvers/registry, and writes files into the consumer-specified directory.",
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "id": "layer.default-resolver",
+      "name": "Default field resolution",
+      "paths": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml"
+      ],
+      "responsibility": "Provides the default resolver used by generated GraphQL code when an explicit resolver is absent.",
+      "evidence": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml"
+      ]
+    }
+  ],
+  "path_mappings": [
+    {
+      "path_prefix": "src/Command",
+      "maps_to": "CLI generator entrypoints",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "path_prefix": "src/DependencyInjection",
+      "maps_to": "Config definition and bundle wiring",
+      "evidence": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "path_prefix": "src/Resources/config",
+      "maps_to": "Service defaults and sample bundle config",
+      "evidence": [
+        "src/Resources/config/flexible_graphql.yaml",
+        "src/Resources/config/services.yaml"
+      ]
+    }
+  ],
+  "di_service_wiring_model": {
+    "summary": "FlexibleGraphqlExtension::load() processes config, loads services.yaml, registers generator services, aliases the chosen type-registry builder, adds console commands, and tags a cache warmer. Resolver tagging and federation representation wiring are implemented in process().",
+    "service_discovery": [
+      "Services implementing ResolverInterface, DirectiveResolverInterface, CustomScalarResolverInterface, UnionResolveTypeInterface, FederationRepresentationResolverInterface, _ServiceResolverInterface, or _EntitiesResolverInterface are tagged during process().",
+      "DefaultResolver is aliased as flexible_graphql.default_resolver and depends on a PropertyAccessor built from flexible_graphql.property_accessor_builder."
+    ],
+    "confidence": 0.82,
+    "evidence": [
+      "src/DependencyInjection/FlexibleGraphqlExtension.php",
+      "src/Resources/config/services.yaml"
+    ]
+  },
+  "config_model": {
+    "root_key": "flexible_graphql",
+    "options": [
+      "default_resolver",
+      "dir",
+      "enable_preload",
+      "executor",
+      "namespace",
+      "schema_files",
+      "schema_type",
+      "template_language_version"
+    ],
+    "defaulting_notes": [
+      "schema_type defaults to graphql.",
+      "executor defaults to sync.",
+      "enable_preload defaults to true in Configuration.php but false in bundled sample YAML and README examples.",
+      "template_language_version defaults to 7.4 even though composer.json requires PHP ^8.3."
+    ],
+    "evidence": [
+      "src/DependencyInjection/Configuration.php",
+      "src/Resources/config/flexible_graphql.yaml",
+      "README.md",
+      "docs/index.md",
+      "composer.json"
+    ]
+  },
+  "cross_module_relationships": [
+    {
+      "from": "mod.bundle-bootstrap",
+      "to": "mod.codegen-commands",
+      "relationship": "Registers command services and binds configured schema_files/schema_type into command constructors.",
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "from": "mod.bundle-bootstrap",
+      "to": "mod.cache-warming",
+      "relationship": "Registers SchemaCacheWarmer with the selected builders and config values.",
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ]
+    },
+    {
+      "from": "mod.generated-code-contract",
+      "to": "mod.consumer-guidance",
+      "relationship": "Docs explain how consuming apps use generated artifacts and configure generation inputs.",
+      "evidence": [
+        "README.md",
+        "docs/index.md"
+      ]
+    }
+  ],
+  "state_and_persistence_model": {
+    "persistent_storage_in_repo": "Not found",
+    "generated_files": "Type registry and generated GraphQL PHP classes are written to the consumer-specified dir path.",
+    "schema_source": "GraphQL SDL files resolved from the consumer-specified schema_files glob or file path.",
+    "evidence": [
+      "README.md",
+      "docs/index.md",
+      "src/CacheWarmer/SchemaCacheWarmer.php",
+      "src/Command/GenerateTypeRegistryCommand.php",
+      "src/DependencyInjection/Configuration.php"
+    ]
+  },
+  "integration_boundaries": [
+    {
+      "boundary": "Consumer Symfony app",
+      "description": "Supplies config, bin/console runtime, optional GraphQL HTTP controller, schema files, and generated output directory.",
+      "evidence": [
+        "README.md",
+        "docs/index.md"
+      ]
+    },
+    {
+      "boundary": "axtiva/flexible-graphql-php",
+      "description": "Provides builders, schema utilities, resolver interfaces, and federation extension helpers used by the bundle.",
+      "evidence": [
+        "composer.json",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "confidence": 0.88,
+  "evidence": [
+    "README.md",
+    "composer.json",
+    "docs/index.md",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/FlexibleGraphqlBundle.php",
+    "src/Resolver/DefaultResolver.php",
+    "src/Resources/config/flexible_graphql.yaml",
+    "src/Resources/config/services.yaml"
+  ]
+}

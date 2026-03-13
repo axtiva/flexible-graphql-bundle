@@ -17,18 +17,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-directive-resolver')]
 class GenerateDirectiveResolverCommand extends Command
 {
-    protected static $defaultName = 'flexible_graphql:generate-directive-resolver';
+    protected static ?string $defaultName = 'flexible_graphql:generate-directive-resolver';
     private string $schemaFiles;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
         string $schemaFiles,
-        string $schemaType,
         CodeGeneratorBuilderInterface $codeGeneratorBuilder
     ) {
         parent::__construct();
         $this->schemaFiles = $schemaFiles;
-        $this->schemaType = $schemaType;
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
@@ -46,7 +44,6 @@ class GenerateDirectiveResolverCommand extends Command
         $io->title('Read schema SDL from ' . $this->schemaFiles);
         $schema = SchemaBuilder::build($this->schemaFiles);
         $codeGenerator = $this->codeGeneratorBuilder->build();
-        /** @var Directive $directive */
         $directiveName = $input->getArgument('directive_name');
         $directive = $schema->getDirective($directiveName);
         if (empty($directive)) {

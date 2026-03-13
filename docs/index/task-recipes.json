@@ -1,0 +1,342 @@
+{
+  "recipes": [
+    {
+      "id": "recipe.add-cli-codegen-command",
+      "intent": "add_backend_feature",
+      "title": "Add a new Symfony console code generation command",
+      "applies_when": [
+        "The task is to scaffold or generate new GraphQL-related artifacts from SDL through CLI.",
+        "Existing Generate*Command patterns are the closest analog."
+      ],
+      "read_first": [
+        "ref.framework.extension",
+        "ref.command.generate-type-registry"
+      ],
+      "likely_touchpoints": [
+        "src/Command/*.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "README.md",
+        "docs/index.md"
+      ],
+      "workflow": [
+        "Mirror the Generate*Command class structure: constructor dependency injection, configure(), execute(), and SymfonyStyle output.",
+        "Register the command in FlexibleGraphqlExtension::registerCommands() with a console.command tag and constructor arguments derived from processed config.",
+        "If the command changes public usage, update README.md command guidance and any relevant quick install docs."
+      ],
+      "required_checks": [
+        "Confirm command namespace stays under flexible_graphql:* if consistent with current patterns.",
+        "If a consumer app is available, run bin/console list flexible_graphql and the new command path.",
+        "Ensure docs stay aligned with any new public command."
+      ],
+      "related_reference_ids": [
+        "ref.framework.extension",
+        "ref.command.generate-type-registry",
+        "ref.doc.setup-guide"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony"
+      ],
+      "common_pitfalls": [
+        "Adding the command class without registering it in the extension.",
+        "Forgetting that execution usually happens in a consumer app, not the bundle repo.",
+        "Changing public command behavior without updating docs."
+      ],
+      "expected_result": "A new flexible_graphql:* command is wired through Symfony DI and documented for consumer use.",
+      "evidence": [
+        "README.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "recipe.change-config-contract",
+      "intent": "investigate_config",
+      "title": "Change or add flexible_graphql configuration",
+      "applies_when": [
+        "The task touches defaults, enum values, consumer options, or config-driven runtime behavior."
+      ],
+      "read_first": [
+        "ref.framework.configuration",
+        "ref.framework.extension",
+        "ref.config.sample-yaml",
+        "ref.doc.setup-guide"
+      ],
+      "likely_touchpoints": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml",
+        "README.md",
+        "docs/index.md"
+      ],
+      "workflow": [
+        "Update Configuration.php first because it is the config tree source of truth.",
+        "Update FlexibleGraphqlExtension wiring if the new or changed option affects builders, commands, cache warm, or service aliases.",
+        "Synchronize src/Resources/config/flexible_graphql.yaml and README/docs examples so consumers see the same contract.",
+        "If the change affects runtime behavior, inspect change-impact and testing guidance before finishing."
+      ],
+      "required_checks": [
+        "Compare defaults across Configuration.php, sample YAML, and docs to eliminate drift.",
+        "If a consumer app is available, run bin/console cache:clear or the narrowest affected command.",
+        "Confirm any enum branch is handled in both config and extension logic."
+      ],
+      "related_reference_ids": [
+        "ref.framework.configuration",
+        "ref.framework.extension",
+        "ref.config.sample-yaml",
+        "ref.doc.setup-guide",
+        "ref.doc.quick-install"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony",
+        "skill.external.graphql-architect"
+      ],
+      "common_pitfalls": [
+        "Changing only Configuration.php and leaving docs/sample YAML stale.",
+        "Missing federation or executor branches in FlexibleGraphqlExtension.",
+        "Ignoring current mismatches such as enable_preload and template_language_version defaults."
+      ],
+      "expected_result": "Consumer-facing config contract and bundle wiring stay synchronized across code and docs.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "id": "recipe.change-service-wiring",
+      "intent": "add_backend_feature",
+      "title": "Change bundle service wiring or builder selection",
+      "applies_when": [
+        "The task touches aliases, resolver tags, command registration, builder classes, or cache warmer wiring."
+      ],
+      "read_first": [
+        "ref.framework.extension",
+        "ref.framework.services-yaml",
+        "ref.framework.configuration"
+      ],
+      "likely_touchpoints": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php",
+        "src/FlexibleGraphqlBundle.php"
+      ],
+      "workflow": [
+        "Identify whether the change belongs in services.yaml, load(), or process().",
+        "If config-driven, confirm the option exists and is documented.",
+        "When touching process(), verify whether compiler-pass registration assumptions need to be addressed or documented.",
+        "Update docs if the public integration behavior changes."
+      ],
+      "required_checks": [
+        "Review command and cache warmer registrations if constructor arguments or aliases change.",
+        "If consumer validation is possible, run cache:clear and the narrowest affected flexible_graphql:* command.",
+        "Check change-impact for docs and related command files that may need synchronized edits."
+      ],
+      "related_reference_ids": [
+        "ref.framework.extension",
+        "ref.framework.services-yaml",
+        "ref.framework.configuration",
+        "ref.runtime.cache-warmer"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony",
+        "skill.external.php-async"
+      ],
+      "common_pitfalls": [
+        "Editing process() logic without noticing reduced confidence around compiler-pass registration.",
+        "Changing aliases or services without checking the default_resolver config contract.",
+        "Forgetting to update command wiring after changing builder constructor signatures."
+      ],
+      "expected_result": "Service registration and builder selection remain coherent across extension logic, services.yaml, and config.",
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    },
+    {
+      "id": "recipe.debug-generation-runtime-flow",
+      "intent": "trace_runtime_flow",
+      "title": "Debug GraphQL generation runtime flow",
+      "applies_when": [
+        "A task asks how generated files are produced or why cache:clear / command generation is failing."
+      ],
+      "read_first": [
+        "ref.runtime.cache-warmer",
+        "ref.command.generate-type-registry",
+        "ref.framework.extension",
+        "ref.framework.configuration"
+      ],
+      "likely_touchpoints": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/DependencyInjection/Configuration.php",
+        "docs/index.md"
+      ],
+      "workflow": [
+        "Determine whether the failing path is cache warm or a direct flexible_graphql:* command.",
+        "Trace config values for schema_files, schema_type, dir, and executor into the selected runtime path.",
+        "For federation cases, inspect both extension builder selection and SchemaCacheWarmer federation extension logic.",
+        "Use docs/index.md only to understand host-app HTTP consumption, not bundle-internal execution."
+      ],
+      "required_checks": [
+        "Confirm schema_files resolves to actual SDL files in the consumer app.",
+        "Confirm generated target dir is writable in the consumer app.",
+        "If command-specific, validate missing directive/type/field/scalar error branches.",
+        "If runtime depends on process(), flag reduced confidence until compiler-pass registration is verified."
+      ],
+      "related_reference_ids": [
+        "ref.runtime.cache-warmer",
+        "ref.command.generate-type-registry",
+        "ref.framework.extension",
+        "ref.framework.configuration",
+        "ref.doc.quick-install"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony",
+        "skill.external.graphql-architect"
+      ],
+      "common_pitfalls": [
+        "Tracing consumer HTTP code instead of the bundle generation path.",
+        "Ignoring federation-specific branches.",
+        "Assuming failures are repo-local when the bundle actually runs in a host app."
+      ],
+      "expected_result": "The active generation path, config inputs, and generated-file outputs are identified with minimal scanning.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "recipe.update-default-resolver",
+      "intent": "implement_user_story",
+      "title": "Change the default resolver behavior",
+      "applies_when": [
+        "The task mentions default_resolver, fallback field lookup, or property access semantics."
+      ],
+      "read_first": [
+        "ref.runtime.default-resolver",
+        "ref.framework.services-yaml",
+        "ref.framework.configuration"
+      ],
+      "likely_touchpoints": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php",
+        "README.md",
+        "docs/index.md"
+      ],
+      "workflow": [
+        "Update DefaultResolver implementation and keep constructor dependencies aligned with services.yaml.",
+        "If the public default_resolver service or config expectation changes, update Configuration.php and docs/sample config.",
+        "Review whether generated code or consumer expectations depend on the old fallback semantics."
+      ],
+      "required_checks": [
+        "Confirm the flexible_graphql.default_resolver alias still points to the intended service.",
+        "If a consumer app is available, validate a field access case that exercises the fallback.",
+        "Update docs if the behavior is part of the consumer contract."
+      ],
+      "related_reference_ids": [
+        "ref.runtime.default-resolver",
+        "ref.framework.services-yaml",
+        "ref.framework.configuration",
+        "ref.doc.setup-guide"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony",
+        "skill.external.php-tester"
+      ],
+      "common_pitfalls": [
+        "Changing resolver behavior without checking the service alias.",
+        "Forgetting docs updates if default_resolver semantics are user-visible.",
+        "Assuming repo-local tests exist for resolver behavior."
+      ],
+      "expected_result": "Default field resolution remains coherent across implementation, service wiring, and consumer contract.",
+      "evidence": [
+        "README.md",
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "id": "recipe.update-integration-entrypoint",
+      "intent": "trace_runtime_flow",
+      "title": "Change bundle integration entrypoints or documented consumer usage",
+      "applies_when": [
+        "The task changes how the bundle integrates with Symfony boot, cache warm, command availability, or documented consumer setup/controller usage."
+      ],
+      "read_first": [
+        "ref.framework.extension",
+        "ref.runtime.cache-warmer",
+        "ref.doc.quick-install",
+        "ref.doc.setup-guide"
+      ],
+      "likely_touchpoints": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/FlexibleGraphqlBundle.php",
+        "README.md",
+        "docs/index.md"
+      ],
+      "workflow": [
+        "Identify whether the entrypoint is in-repo code (extension/cache warmer/commands) or documentation-only consumer usage.",
+        "Update in-repo wiring first, then synchronize consumer docs so they reflect the actual integration path.",
+        "If touching compiler-pass style logic, flag or verify registration assumptions because bundle class evidence is minimal."
+      ],
+      "required_checks": [
+        "Reconcile docs with code entrypoints and command availability.",
+        "If a consumer app is available, run cache:clear or list flexible_graphql commands.",
+        "Update high-signal docs if the public integration contract changes."
+      ],
+      "related_reference_ids": [
+        "ref.framework.extension",
+        "ref.runtime.cache-warmer",
+        "ref.doc.quick-install",
+        "ref.doc.setup-guide"
+      ],
+      "related_skill_ids": [
+        "skill.external.php-graphql",
+        "skill.external.php-symfony",
+        "skill.external.graphql-architect"
+      ],
+      "common_pitfalls": [
+        "Treating docs controller example as local runtime code.",
+        "Changing integration behavior without updating consumer docs.",
+        "Missing FlexibleGraphqlBundle registration implications for compiler-pass behavior."
+      ],
+      "expected_result": "Bundle integration and consumer-facing documentation describe the same runtime path.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    }
+  ],
+  "unsupported_topics": {
+    "add_backend_endpoint_in_repo": "Not found",
+    "add_or_change_persistence_layer": "Not found",
+    "add_migration": "Not found",
+    "adjust_docker_local_dev_stack": "Not found",
+    "change_frontend_component": "Not found",
+    "change_mobile_feature": "Not found",
+    "update_integration_receiver_webhook": "Not found"
+  }
+}

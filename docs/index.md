@@ -27,11 +27,16 @@ flexible_graphql:
   default_resolver: flexible_graphql.default_resolver # default resolver if it does not defined
 ```
 
-## Define container as service
+## Use scoped TypeRegistry locator
 
 ```yaml
 services:
-  Psr\Container\ContainerInterface: '@service_container'
+  # Provided by the bundle. Used by generated TypeRegistry constructor.
+  flexible_graphql.type_registry.service_locator: ~
+
+  App\GraphQL\TypeRegistry:
+    arguments:
+      $locator: '@flexible_graphql.type_registry.service_locator'
 ```
 
 ## Run code generation with warmup command

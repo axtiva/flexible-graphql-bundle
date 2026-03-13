@@ -23,11 +23,11 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: Install dependencies
-        run: composer update --no-interaction --prefer-dist --with-all-dependencies symfony/*:${{ matrix.symfony-version }}
-
       - name: Composer install
         run: composer install --no-interaction --prefer-dist
+
+      - name: Install Symfony matrix dependencies
+        run: composer update --no-interaction --prefer-dist --with-all-dependencies symfony/*:${{ matrix.symfony-version }}
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse -c phpstan.neon.dist

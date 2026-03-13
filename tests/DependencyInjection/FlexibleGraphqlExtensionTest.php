@@ -9,6 +9,7 @@ use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGenerato
 use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderAmphpV2;
 use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
+use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
 use Axtiva\FlexibleGraphqlBundle\Builder\ScopedTypeRegistryGeneratorBuilder;
 use Axtiva\FlexibleGraphqlBundle\DependencyInjection\FlexibleGraphqlExtension;
 use Axtiva\FlexibleGraphqlBundle\Resolver\DefaultResolver;
@@ -69,6 +70,18 @@ final class FlexibleGraphqlExtensionTest extends TestCase
 
         $defaultResolverDefinition = $container->getDefinition(DefaultResolver::class);
         self::assertArrayHasKey(FlexibleGraphqlExtension::TYPE_REGISTRY_SERVICE_TAG, $defaultResolverDefinition->getTags());
+    }
+
+    public function testResolverAutoconfigurationAddsTypeRegistryServiceTag(): void
+    {
+        $container = $this->loadExtension('graphql', 'sync');
+
+        $autoconfigurations = $container->getAutoconfiguredInstanceof();
+        self::assertArrayHasKey(ResolverInterface::class, $autoconfigurations);
+
+        $resolverAutoconfiguration = $autoconfigurations[ResolverInterface::class];
+        self::assertArrayHasKey(FlexibleGraphqlExtension::TYPE_REGISTRY_SERVICE_TAG, $resolverAutoconfiguration->getTags());
+        self::assertArrayHasKey(FlexibleGraphqlExtension::RESOLVER_TAG, $resolverAutoconfiguration->getTags());
     }
 
     /**

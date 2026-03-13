@@ -16,7 +16,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-type-registry')]
 class GenerateTypeRegistryCommand extends Command
 {
-    protected static ?string $defaultName = 'flexible_graphql:generate-type-registry';
     private string $schemaFiles;
     private TypeRegistryGeneratorBuilderInterface $typeRegistryGeneratorBuilder;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;

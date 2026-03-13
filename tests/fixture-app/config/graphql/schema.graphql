@@ -1,3 +1,36 @@
+directive @upper on FIELD_DEFINITION
+
+input GreetingInput {
+  prefix: String!
+  suffix: String!
+}
+
+input CreateGroupAccountInput {
+  title: String!
+}
+
+type UserSearchResult {
+  id: ID!
+  username: String!
+}
+
+type GroupSearchResult {
+  id: ID!
+  title: String!
+}
+
+union SearchResult = UserSearchResult | GroupSearchResult
+
+type GroupAccount {
+  id: ID!
+  title: String!
+}
+
 type Query {
-  ping: String!
+  greet(name: String!, input: GreetingInput!): String! @upper
+  search(kind: String!): SearchResult!
+}
+
+type Mutation {
+  createGroupAccount(input: CreateGroupAccountInput!): GroupAccount!
 }

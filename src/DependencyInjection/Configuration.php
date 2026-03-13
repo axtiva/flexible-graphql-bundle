@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Axtiva\FlexibleGraphqlBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\BooleanNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\EnumNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -23,6 +25,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder(self::NAME, 'array');
 
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -36,7 +39,7 @@ class Configuration implements ConfigurationInterface
                     'namespace',
                     'App\GraphQL',
                     'Root namespace for generated code'
-                )->isRequired())
+                ))
                 ->append($this->addScalar(
                     'template_language_version',
                     '8.3',
@@ -46,13 +49,16 @@ class Configuration implements ConfigurationInterface
                     'dir',
                     '%kernel.project_dir%/src/GraphQL/',
                     'Root dir for generated code'
-                )->isRequired())
+                ))
             ->end();
 
         return $treeBuilder;
     }
 
-    private function schemaType(): ScalarNodeDefinition
+    /**
+     * @return EnumNodeDefinition<null>
+     */
+    private function schemaType(): EnumNodeDefinition
     {
         $treeBuilder = new TreeBuilder('schema_type', 'enum');
 
@@ -68,7 +74,10 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    private function operationType(): ScalarNodeDefinition
+    /**
+     * @return EnumNodeDefinition<null>
+     */
+    private function operationType(): EnumNodeDefinition
     {
         $treeBuilder = new TreeBuilder('executor', 'enum');
 
@@ -84,7 +93,10 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    private function enablePreload(): ScalarNodeDefinition
+    /**
+     * @return BooleanNodeDefinition<null>
+     */
+    private function enablePreload(): BooleanNodeDefinition
     {
         $treeBuilder = new TreeBuilder('enable_preload', 'boolean');
 
@@ -109,7 +121,6 @@ class Configuration implements ConfigurationInterface
         $node
             ->info('Full path to schema sdl files like /path/to/schema.graphql or glob template')
             ->defaultValue('%kernel.project_dir%/config/graphql/*.graphql')
-            ->isRequired()
         ->end();
 
         return $node;

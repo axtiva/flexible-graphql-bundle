@@ -14,8 +14,13 @@ use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGenerato
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\CodeGeneratorConfigInterface;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\CodeGeneratorConfig;
+use Axtiva\FlexibleGraphql\Resolver\CustomScalarResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\FederationRepresentationResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\_EntitiesResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
 use Axtiva\FlexibleGraphql\Resolver\_ServiceResolverInterface;
+use Axtiva\FlexibleGraphql\Resolver\UnionResolveTypeInterface;
 use Axtiva\FlexibleGraphqlBundle\Builder\ScopedTypeRegistryGeneratorBuilder;
 use Axtiva\FlexibleGraphqlBundle\CacheWarmer\SchemaCacheWarmer;
 use Axtiva\FlexibleGraphqlBundle\Command\GenerateDirectiveResolverCommand;
@@ -66,6 +71,9 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     {
         $yamlLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $yamlLoader->load('services.yaml');
+
+        $this->registerResolverAutoconfiguration($container);
+
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
         $this->config = $config;
         $this->registerConfigGenerator($this->config, $container);
@@ -90,6 +98,48 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     public function getAlias(): string
     {
         return Configuration::NAME;
+    }
+
+    private function registerResolverAutoconfiguration(ContainerBuilder $container): void
+    {
+        $container
+            ->registerForAutoconfiguration(ResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::RESOLVER_TAG)
+            ->addTag(self::TYPE_REGISTRY_SERVICE_TAG);
+
+        $container
+            ->registerForAutoconfiguration(DirectiveResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::DIRECTIVE_RESOLVER_TAG)
+            ->addTag(self::TYPE_REGISTRY_SERVICE_TAG);
+
+        $container
+            ->registerForAutoconfiguration(CustomScalarResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::SCALAR_RESOLVER_TAG)
+            ->addTag(self::TYPE_REGISTRY_SERVICE_TAG);
+
+        $container
+            ->registerForAutoconfiguration(UnionResolveTypeInterface::class)
+            ->setPublic(true)
+            ->addTag(self::UNION_TYPE_RESOLVER_TAG)
+            ->addTag(self::TYPE_REGISTRY_SERVICE_TAG);
+
+        $container
+            ->registerForAutoconfiguration(FederationRepresentationResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::FEDERATION_REPRESENTATION_RESOLVER_TAG);
+
+        $container
+            ->registerForAutoconfiguration(_ServiceResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::_SERVICE_RESOLVER_TAG);
+
+        $container
+            ->registerForAutoconfiguration(_EntitiesResolverInterface::class)
+            ->setPublic(true)
+            ->addTag(self::_ENTITIES_RESOLVER_TAG);
     }
 
     /**

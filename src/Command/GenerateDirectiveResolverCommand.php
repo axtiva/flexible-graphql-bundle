@@ -17,7 +17,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-directive-resolver')]
 class GenerateDirectiveResolverCommand extends Command
 {
-    protected static ?string $defaultName = 'flexible_graphql:generate-directive-resolver';
     private string $schemaFiles;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
@@ -30,7 +29,7 @@ class GenerateDirectiveResolverCommand extends Command
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('generate executive directive resolver')

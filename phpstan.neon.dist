@@ -1,9 +1,18 @@
 parameters:
   level: 6
+  bootstrapFiles:
+      - phpstan-bootstrap.php
+  parallel:
+      maximumNumberOfProcesses: 4
   paths:
     - src
     - tests
   excludePaths:
     analyse:
-      - tests/fixture-app/var/*
+      - tests/fixture-app/var/cache/*
   tmpDir: var/phpstan
+  ignoreErrors:
+    -
+      identifier: missingType.generics
+      paths:
+        - tests/fixture-app/var/generated/*

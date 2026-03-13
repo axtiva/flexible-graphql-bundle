@@ -49,3 +49,19 @@ Quick install [guide](docs/index.md)
 ```shell
 bin/console list flexible_graphql
 ```
+
+## Tests
+
+Run tests
+
+```
+php vendor/bin/phpunit 
+```
+
+## PHPStan
+
+Run PHPStan
+
+```
+php vendor/bin/phpstan analyse -c phpstan.neon.dist
+```

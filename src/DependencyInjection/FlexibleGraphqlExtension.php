@@ -89,7 +89,7 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
     private function registerResolvers(array $config, ContainerBuilder $container)
     {
         if (!file_exists($config['dir'])) {
-            mkdir($config['dir'], 0777, true);
+            mkdir($config['dir'], 0755, true);
         }
 
         $defaultDefinition = new Definition();

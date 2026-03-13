@@ -7,18 +7,19 @@ namespace Axtiva\FlexibleGraphqlBundle\Resolver;
 use GraphQL\Executor\Executor;
 use GraphQL\Type\Definition\ResolveInfo;
 use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use ArrayAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class DefaultResolver implements ResolverInterface
 {
-    private PropertyAccessor $propertyAccessor;
+    private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(PropertyAccessor $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    public function __invoke($rootValue, $args, $context, ResolveInfo $info)
+    public function __invoke(mixed $rootValue, array|ArrayAccess|null $args, mixed $context, ResolveInfo $info): mixed
     {
         $property = Executor::defaultFieldResolver($rootValue, $args, $context, $info);
 

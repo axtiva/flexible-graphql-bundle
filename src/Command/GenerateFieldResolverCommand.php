@@ -17,18 +17,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'flexible_graphql:generate-field-resolver')]
 class GenerateFieldResolverCommand extends Command
 {
-    protected static $defaultName = 'flexible_graphql:generate-field-resolver';
+    protected static ?string $defaultName = 'flexible_graphql:generate-field-resolver';
     private string $schemaFiles;
     private CodeGeneratorBuilderInterface $codeGeneratorBuilder;
 
     public function __construct(
         string $schemaFiles,
-        string $schemaType,
         CodeGeneratorBuilderInterface $codeGeneratorBuilder
     ) {
         parent::__construct();
         $this->schemaFiles = $schemaFiles;
-        $this->schemaType = $schemaType;
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
@@ -54,11 +52,12 @@ class GenerateFieldResolverCommand extends Command
             $io->error('Type did not found in schema ' . $typeName);
             return Command::FAILURE;
         }
-        $field = $type->getField($fieldName);
-        if (empty($field)) {
+        if (! $type->hasField($fieldName)) {
             $io->error('Field did not found in type ' . $fieldName);
             return Command::FAILURE;
         }
+
+        $field = $type->getField($fieldName);
 
         $io->success('Field resolver generated');
         foreach ($codeGenerator->generateFieldResolver($type, $field, $schema) as $code) {

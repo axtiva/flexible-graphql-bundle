@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.3', '8.4', '8.5']
+        symfony-version: ['6.4.*', '7.*', '8.*']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist --with-all-dependencies symfony/*:${{ matrix.symfony-version }}
+
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse -c phpstan.neon.dist
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit -c phpunit.xml.dist
+
+      - name: Fixture app cache clear
+        run: php tests/fixture-app/bin/console cache:clear --env=test --no-interaction
+
+      - name: Fixture app type registry generation
+        run: php tests/fixture-app/bin/console flexible_graphql:generate-type-registry --env=test --no-interaction

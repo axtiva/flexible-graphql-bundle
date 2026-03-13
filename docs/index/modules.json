@@ -1,0 +1,287 @@
+{
+  "modules": [
+    {
+      "id": "mod.bundle-bootstrap",
+      "name": "Bundle bootstrap and dependency injection",
+      "kind": "infrastructure",
+      "paths": [
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml"
+      ],
+      "summary": "Defines the bundle, its flexible_graphql config tree, service aliases, generator wiring, command registration, and resolver tagging behavior.",
+      "key_symbols": [
+        "Axtiva\\FlexibleGraphqlBundle\\FlexibleGraphqlBundle",
+        "Axtiva\\FlexibleGraphqlBundle\\DependencyInjection\\Configuration",
+        "Axtiva\\FlexibleGraphqlBundle\\DependencyInjection\\FlexibleGraphqlExtension"
+      ],
+      "related_entrypoints": [
+        "ep.integration.bundle-extension-load",
+        "ep.integration.bundle-extension-process"
+      ],
+      "module_dependencies": [
+        "mod.cache-warming",
+        "mod.codegen-commands",
+        "mod.default-resolution",
+        "mod.generated-code-contract"
+      ],
+      "paired_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "flexible_graphql config contract",
+        "Service tags for resolver discovery",
+        "Console command registration"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Add or change supported config options.",
+        "Adjust executor or federation wiring.",
+        "Register new services or console commands."
+      ],
+      "reference_priority": 1,
+      "evidence": [
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml"
+      ]
+    },
+    {
+      "id": "mod.cache-warming",
+      "name": "Schema cache warming and generated file refresh",
+      "kind": "runtime-generation",
+      "paths": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "summary": "Warms the Symfony cache by loading schema SDL, generating all types, and writing the TypeRegistry class; federation mode extends the schema before generation.",
+      "key_symbols": [
+        "Axtiva\\FlexibleGraphqlBundle\\CacheWarmer\\SchemaCacheWarmer::warmUp"
+      ],
+      "related_entrypoints": [
+        "ep.background.schema-cache-warmer"
+      ],
+      "module_dependencies": [
+        "mod.generated-code-contract"
+      ],
+      "paired_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "kernel.cache_warmer integration",
+        "Consumer cache:clear regeneration path"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Change schema build or federated extension flow.",
+        "Change generated artifact writing behavior.",
+        "Adjust cache warming integration with bundle config."
+      ],
+      "reference_priority": 1,
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "README.md",
+        "docs/index.md"
+      ]
+    },
+    {
+      "id": "mod.codegen-commands",
+      "name": "Console code generation commands",
+      "kind": "cli",
+      "paths": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "summary": "Exposes Symfony console commands for generating type registries and resolver stubs from the configured schema SDL.",
+      "key_symbols": [
+        "GenerateDirectiveResolverCommand",
+        "GenerateFieldResolverCommand",
+        "GenerateScalarResolverCommand",
+        "GenerateTypeRegistryCommand"
+      ],
+      "related_entrypoints": [
+        "ep.cli.generate-directive-resolver",
+        "ep.cli.generate-field-resolver",
+        "ep.cli.generate-scalar-resolver",
+        "ep.cli.generate-type-registry"
+      ],
+      "module_dependencies": [
+        "mod.generated-code-contract"
+      ],
+      "paired_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "flexible_graphql:generate-directive-resolver",
+        "flexible_graphql:generate-field-resolver",
+        "flexible_graphql:generate-scalar-resolver",
+        "flexible_graphql:generate-type-registry"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Add a new CLI generator command.",
+        "Adjust command arguments or error handling.",
+        "Modify generator selection based on schema_type."
+      ],
+      "reference_priority": 1,
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "README.md"
+      ]
+    },
+    {
+      "id": "mod.default-resolution",
+      "name": "Default fallback field resolver",
+      "kind": "resolver",
+      "paths": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php"
+      ],
+      "summary": "Provides the default resolver service used when a specific resolver is not configured; it falls back from GraphQL default field resolution to Symfony PropertyAccess path lookup.",
+      "key_symbols": [
+        "Axtiva\\FlexibleGraphqlBundle\\Resolver\\DefaultResolver::__invoke"
+      ],
+      "related_entrypoints": [],
+      "module_dependencies": [
+        "mod.bundle-bootstrap"
+      ],
+      "paired_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "flexible_graphql.default_resolver service id",
+        "default_resolver config option"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Change fallback field access behavior.",
+        "Swap the default resolver alias or service wiring.",
+        "Adjust property access builder behavior."
+      ],
+      "reference_priority": 2,
+      "evidence": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php",
+        "README.md"
+      ]
+    },
+    {
+      "id": "mod.generated-code-contract",
+      "name": "Generated code contract and consumer handoff",
+      "kind": "integration-contract",
+      "paths": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ],
+      "summary": "Defines where generated GraphQL code is written, which schema files are consumed, how schema_type and executor affect generation, and how the consumer app is expected to use the generated TypeRegistry.",
+      "key_symbols": [
+        "Configuration::SCHEMA_TYPE_FEDERATION",
+        "Configuration::EXECUTOR_TYPE_SYNC",
+        "TypeRegistryGeneratorBuilderInterface",
+        "CodeGeneratorBuilderInterface"
+      ],
+      "related_entrypoints": [
+        "ep.background.schema-cache-warmer",
+        "ep.cli.generate-type-registry",
+        "ep.http.consumer-doc-example-graphql-controller",
+        "ep.integration.bundle-extension-load"
+      ],
+      "module_dependencies": [
+        "mod.bundle-bootstrap",
+        "mod.cache-warming",
+        "mod.codegen-commands"
+      ],
+      "paired_configs": [
+        "cfg.bundle.sample-flexible-graphql-doc",
+        "cfg.bundle.user-config-contract"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "Generated TypeRegistry PHP class",
+        "Generated type classes and resolver skeletons",
+        "Consumer setup documentation"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Change generated namespace or target directory semantics.",
+        "Add new generation-time options.",
+        "Update consumer docs for generated TypeRegistry usage."
+      ],
+      "reference_priority": 1,
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "id": "mod.consumer-guidance",
+      "name": "Consumer setup and usage guidance",
+      "kind": "documentation",
+      "paths": [
+        "README.md",
+        "docs/index.md",
+        "CHANGELOG.md"
+      ],
+      "summary": "Documents installation, bundle configuration, cache clear regeneration, a sample GraphQL controller, and release-level compatibility changes such as PHP 8.3 and Symfony 8 support.",
+      "key_symbols": [
+        "bin/console cache:clear",
+        "bin/console list flexible_graphql"
+      ],
+      "related_entrypoints": [
+        "ep.http.consumer-doc-example-graphql-controller"
+      ],
+      "module_dependencies": [
+        "mod.generated-code-contract"
+      ],
+      "paired_configs": [
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "paired_tests": "Not found",
+      "public_surfaces": [
+        "Setup guide",
+        "Example consumer controller",
+        "Release compatibility notes"
+      ],
+      "internal_only": false,
+      "typical_changes": [
+        "Update installation or usage docs.",
+        "Synchronize docs with config defaults or new commands.",
+        "Record release-level compatibility changes."
+      ],
+      "reference_priority": 2,
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "CHANGELOG.md"
+      ]
+    }
+  ]
+}

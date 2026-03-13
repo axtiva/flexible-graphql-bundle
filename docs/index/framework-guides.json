@@ -1,0 +1,178 @@
+{
+  "guides": [
+    {
+      "id": "guide.framework.symfony-bundle",
+      "framework": "Symfony bundle",
+      "workspace_id": "ws.bundle-core",
+      "detected_via": [
+        "composer.json",
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "key_concepts_in_repo": [
+        "Bundle class is minimal; most behavior lives in the DI extension.",
+        "Consumer-facing configuration is defined in Configuration.php under the flexible_graphql root.",
+        "Operational wiring happens through service registration, command tags, and kernel.cache_warmer tags."
+      ],
+      "change_impact_notes": [
+        "Bundle behavior changes usually require edits in both Configuration.php and FlexibleGraphqlExtension.php.",
+        "If a change affects public integration, README.md and docs/index.md usually also need updates.",
+        "process() contains compiler-pass style logic but bundle-class evidence does not confirm local registration, so changes there require extra caution."
+      ],
+      "related_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "related_reference_ids": [
+        "ref.framework.configuration",
+        "ref.framework.extension",
+        "ref.framework.services-yaml"
+      ],
+      "evidence": [
+        "composer.json",
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml"
+      ]
+    },
+    {
+      "id": "guide.framework.symfony-console",
+      "framework": "Symfony Console",
+      "workspace_id": "ws.bundle-core",
+      "detected_via": [
+        "composer.json",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ],
+      "key_concepts_in_repo": [
+        "Commands are declared with #[AsCommand] and also explicitly registered in FlexibleGraphqlExtension::registerCommands().",
+        "Commands use SymfonyStyle for operator feedback and return Command::FAILURE for missing schema elements.",
+        "The commands are part of the bundle and run through a consumer app's bin/console."
+      ],
+      "change_impact_notes": [
+        "Adding or changing a command likely requires updates to both its class and extension registration.",
+        "Public command changes should be reflected in README.md command discovery guidance.",
+        "Argument validation behavior is defined in the command classes, not external config files."
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.list-flexible-graphql"
+      ],
+      "related_tests": "Not found",
+      "related_reference_ids": [
+        "ref.command.generate-type-registry",
+        "ref.framework.extension",
+        "ref.doc.setup-guide"
+      ],
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "README.md"
+      ]
+    },
+    {
+      "id": "guide.framework.symfony-cache-warmer",
+      "framework": "Symfony CacheWarmerInterface",
+      "workspace_id": "ws.bundle-core",
+      "detected_via": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "key_concepts_in_repo": [
+        "SchemaCacheWarmer is tagged as kernel.cache_warmer with priority 50.",
+        "warmUp() is a generation path, not merely a cache precomputation path.",
+        "Federation mode modifies the schema before generation and registry write."
+      ],
+      "change_impact_notes": [
+        "Any change here affects the documented cache:clear workflow and generated outputs.",
+        "Builder contract changes must stay aligned with FlexibleGraphqlExtension registration.",
+        "Consumer validation should use cache:clear when possible."
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "related_reference_ids": [
+        "ref.runtime.cache-warmer",
+        "ref.framework.extension",
+        "ref.doc.quick-install"
+      ],
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "README.md",
+        "docs/index.md"
+      ]
+    },
+    {
+      "id": "guide.framework.graphql-schema-first-generation",
+      "framework": "Schema-first GraphQL generation",
+      "workspace_id": "ws.bundle-core",
+      "detected_via": [
+        "README.md",
+        "composer.json",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "key_concepts_in_repo": [
+        "SDL files are the primary schema source, configured through schema_files.",
+        "Generated PHP artifacts are written under the configured dir and namespace.",
+        "schema_type selects graphql vs federation generation branches, and executor selects sync vs amphp builder aliasing."
+      ],
+      "change_impact_notes": [
+        "Schema generation changes usually ripple across config tree, extension wiring, cache warmer, commands, and docs.",
+        "Consumer setup docs are part of the framework usage surface because the host app supplies schema and output paths.",
+        "Federation-related changes should review both config and runtime branches."
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract",
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.cache-clear"
+      ],
+      "related_tests": "Not found",
+      "related_reference_ids": [
+        "ref.framework.configuration",
+        "ref.framework.extension",
+        "ref.runtime.cache-warmer",
+        "ref.doc.quick-install"
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ]
+}

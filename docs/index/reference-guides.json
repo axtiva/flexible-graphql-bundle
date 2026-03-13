@@ -1,0 +1,363 @@
+{
+  "references": [
+    {
+      "id": "ref.command.generate-type-registry",
+      "path": "src/Command/GenerateTypeRegistryCommand.php",
+      "kind": "entrypoint",
+      "scope": "workspace",
+      "title": "Type registry generator command",
+      "why_read": "This is the narrowest in-repo entrypoint for understanding full type generation without tracing the cache warmer first.",
+      "when_relevant": [
+        "Adding or changing generated type output.",
+        "Tracing GraphQL code generation flow from SDL to files.",
+        "Planning CLI validation in a consumer app."
+      ],
+      "what_you_learn": [
+        "How schema SDL is loaded and handed to builders.",
+        "What files are written during registry generation.",
+        "What success output the command emits."
+      ],
+      "related_modules": [
+        "mod.codegen-commands",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [
+        "ep.cli.generate-type-registry"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "id": "ref.doc.setup-guide",
+      "path": "README.md",
+      "kind": "repository-doc",
+      "scope": "repository",
+      "title": "Primary setup and usage guide",
+      "why_read": "Read this first for install, sample config, consumer workflow, and command discovery before inspecting source files.",
+      "when_relevant": [
+        "Consumer setup questions.",
+        "Validating whether a task belongs to this bundle or the host app.",
+        "Understanding documented operational workflows."
+      ],
+      "what_you_learn": [
+        "How the bundle is intended to be installed and configured.",
+        "That cache:clear is the documented generation trigger.",
+        "Which command namespace is exposed to consumer apps."
+      ],
+      "related_modules": [
+        "mod.consumer-guidance",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [
+        "ep.http.consumer-doc-example-graphql-controller"
+      ],
+      "related_configs": [
+        "cfg.bundle.sample-flexible-graphql-doc",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear",
+        "cmd.consumer.list-flexible-graphql"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "ref.doc.quick-install",
+      "path": "docs/index.md",
+      "kind": "repository-doc",
+      "scope": "repository",
+      "title": "Quick install and consumer GraphQL controller example",
+      "why_read": "This document contains the clearest end-to-end example of how a consumer app uses the generated TypeRegistry in a GraphQL controller.",
+      "when_relevant": [
+        "Tracing consumer runtime flow.",
+        "Explaining what generated artifacts are for.",
+        "Clarifying host-app integration boundaries."
+      ],
+      "what_you_learn": [
+        "How generated TypeRegistry is consumed by a host Symfony controller.",
+        "That HTTP runtime lives in the consumer app, not in this bundle repository.",
+        "An example service requirement for Psr\\Container\\ContainerInterface in the consumer app."
+      ],
+      "related_modules": [
+        "mod.consumer-guidance",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [
+        "ep.http.consumer-doc-example-graphql-controller"
+      ],
+      "related_configs": [
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "docs/index.md"
+      ]
+    },
+    {
+      "id": "ref.framework.configuration",
+      "path": "src/DependencyInjection/Configuration.php",
+      "kind": "framework-core",
+      "scope": "workspace",
+      "title": "flexible_graphql config tree source of truth",
+      "why_read": "Read this before changing defaults, adding config options, or evaluating compatibility of docs and sample YAML.",
+      "when_relevant": [
+        "Investigating config behavior.",
+        "Changing schema_type or executor support.",
+        "Planning generation or preload related changes."
+      ],
+      "what_you_learn": [
+        "Supported config keys and enum values.",
+        "Default values and their current inconsistencies with docs/sample YAML.",
+        "Which options are required for code generation."
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [
+        "ep.integration.bundle-extension-load"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "id": "ref.framework.extension",
+      "path": "src/DependencyInjection/FlexibleGraphqlExtension.php",
+      "kind": "framework-core",
+      "scope": "workspace",
+      "title": "Bundle DI extension and wiring hub",
+      "why_read": "This is the main hub for service registration, command registration, builder selection, cache warmer setup, and resolver tagging behavior.",
+      "when_relevant": [
+        "Changing service wiring.",
+        "Adding new commands or generator branches.",
+        "Tracing runtime flow from config to executable surfaces."
+      ],
+      "what_you_learn": [
+        "How processed config values shape runtime wiring.",
+        "How commands and cache warmer are registered.",
+        "Which resolver interfaces are tagged and how federation representation injection works."
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.codegen-commands",
+        "mod.cache-warming"
+      ],
+      "related_entrypoints": [
+        "ep.integration.bundle-extension-load",
+        "ep.integration.bundle-extension-process"
+      ],
+      "related_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "ref.framework.services-yaml",
+      "path": "src/Resources/config/services.yaml",
+      "kind": "config",
+      "scope": "workspace",
+      "title": "Bundle service defaults and default resolver alias",
+      "why_read": "Small but high-signal file for understanding the default resolver and property accessor service chain.",
+      "when_relevant": [
+        "Changing default_resolver behavior.",
+        "Debugging property access fallback.",
+        "Investigating public service IDs exposed by the bundle."
+      ],
+      "what_you_learn": [
+        "Alias and public visibility for flexible_graphql.default_resolver.",
+        "How PropertyAccessorInterface is built for the resolver.",
+        "Which services are auto-wired by default."
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.default-resolution"
+      ],
+      "related_entrypoints": [
+        "ep.integration.bundle-extension-load"
+      ],
+      "related_configs": [
+        "cfg.bundle.service-definitions"
+      ],
+      "related_commands": [],
+      "related_tests": "Not found",
+      "priority": 2,
+      "evidence": [
+        "src/Resources/config/services.yaml"
+      ]
+    },
+    {
+      "id": "ref.runtime.cache-warmer",
+      "path": "src/CacheWarmer/SchemaCacheWarmer.php",
+      "kind": "entrypoint",
+      "scope": "workspace",
+      "title": "Schema cache warmer generation runtime",
+      "why_read": "This is the most direct source for how cache:clear triggers schema loading, federation extension, type generation, and registry file writes.",
+      "when_relevant": [
+        "Debugging runtime generation flow.",
+        "Changing generation order or outputs.",
+        "Understanding consumer cache warm side effects."
+      ],
+      "what_you_learn": [
+        "Which generation steps occur during warmUp().",
+        "How federation mode alters the schema before generation.",
+        "Where the TypeRegistry file is written."
+      ],
+      "related_modules": [
+        "mod.cache-warming",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [
+        "ep.background.schema-cache-warmer"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_tests": "Not found",
+      "priority": 1,
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ]
+    },
+    {
+      "id": "ref.runtime.default-resolver",
+      "path": "src/Resolver/DefaultResolver.php",
+      "kind": "entrypoint",
+      "scope": "workspace",
+      "title": "Default resolver fallback implementation",
+      "why_read": "Read this when resolver behavior or fallback field access is involved; it is isolated and easy to reason about.",
+      "when_relevant": [
+        "Changing default resolution semantics.",
+        "Investigating null field behavior.",
+        "Evaluating default_resolver config changes."
+      ],
+      "what_you_learn": [
+        "How GraphQL default field resolution is combined with PropertyAccess.",
+        "Which constructor dependency the resolver needs.",
+        "Why the default resolver alias matters to consumers."
+      ],
+      "related_modules": [
+        "mod.default-resolution"
+      ],
+      "related_entrypoints": [],
+      "related_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [],
+      "related_tests": "Not found",
+      "priority": 2,
+      "evidence": [
+        "src/Resolver/DefaultResolver.php"
+      ]
+    },
+    {
+      "id": "ref.config.sample-yaml",
+      "path": "src/Resources/config/flexible_graphql.yaml",
+      "kind": "config",
+      "scope": "workspace",
+      "title": "Bundled sample flexible_graphql YAML",
+      "why_read": "Use this as the compact consumer-facing example config and to detect drift versus Configuration.php and docs.",
+      "when_relevant": [
+        "Updating config examples.",
+        "Auditing default value drift.",
+        "Preparing installation guidance."
+      ],
+      "what_you_learn": [
+        "Current sample values exposed by the package.",
+        "Consumer-facing examples for namespace, dir, schema_type, schema_files, enable_preload, default_resolver, and template_language_version.",
+        "Where docs examples likely came from."
+      ],
+      "related_modules": [
+        "mod.generated-code-contract",
+        "mod.consumer-guidance"
+      ],
+      "related_entrypoints": [],
+      "related_configs": [
+        "cfg.bundle.sample-flexible-graphql-doc",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_tests": "Not found",
+      "priority": 2,
+      "evidence": [
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "id": "ref.doc.changelog",
+      "path": "CHANGELOG.md",
+      "kind": "repository-doc",
+      "scope": "repository",
+      "title": "Compatibility and release change history",
+      "why_read": "Use this when a task depends on supported PHP/Symfony versions or recent feature additions like amphp and federation-related changes.",
+      "when_relevant": [
+        "Assessing compatibility impact.",
+        "Understanding why config branches for async or version support exist.",
+        "Planning upgrade-related repository changes."
+      ],
+      "what_you_learn": [
+        "That v3.0.0 added Symfony 8 and PHP 8.3 support and mentions tests/PHPStan work.",
+        "That v2.1.0 added amphp v2 and v3 support.",
+        "High-level release sequencing for downstream upgrade planning."
+      ],
+      "related_modules": [
+        "mod.consumer-guidance",
+        "mod.generated-code-contract"
+      ],
+      "related_entrypoints": [],
+      "related_configs": [
+        "cfg.bundle.manifest"
+      ],
+      "related_commands": [],
+      "related_tests": "Not found",
+      "priority": 3,
+      "evidence": [
+        "CHANGELOG.md"
+      ]
+    }
+  ]
+}

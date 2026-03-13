@@ -1,0 +1,195 @@
+{
+  "http": [
+    {
+      "id": "ep.http.consumer-doc-example-graphql-controller",
+      "type": "http",
+      "framework": "Symfony controller example in documentation",
+      "file_path": "docs/index.md",
+      "symbol": "App\\Controller\\GraphqlController::index",
+      "binding_source": "@Route(\"/graphql\", name=\"graphql\") in documentation example",
+      "related_module_ids": [
+        "mod.consumer-guidance"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.sample-flexible-graphql-doc",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.http.consumer-doc-example"
+      ],
+      "evidence": [
+        "docs/index.md",
+        "README.md"
+      ],
+      "confidence": 0.41
+    }
+  ],
+  "cli": [
+    {
+      "id": "ep.cli.generate-directive-resolver",
+      "type": "cli",
+      "framework": "Symfony Console",
+      "file_path": "src/Command/GenerateDirectiveResolverCommand.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\Command\\GenerateDirectiveResolverCommand",
+      "binding_source": "#[AsCommand(name: 'flexible_graphql:generate-directive-resolver')] and console.command tag registration",
+      "related_module_ids": [
+        "mod.codegen-commands"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.cli.codegen"
+      ],
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "ep.cli.generate-field-resolver",
+      "type": "cli",
+      "framework": "Symfony Console",
+      "file_path": "src/Command/GenerateFieldResolverCommand.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\Command\\GenerateFieldResolverCommand",
+      "binding_source": "#[AsCommand(name: 'flexible_graphql:generate-field-resolver')] and console.command tag registration",
+      "related_module_ids": [
+        "mod.codegen-commands"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.cli.codegen"
+      ],
+      "evidence": [
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "ep.cli.generate-scalar-resolver",
+      "type": "cli",
+      "framework": "Symfony Console",
+      "file_path": "src/Command/GenerateScalarResolverCommand.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\Command\\GenerateScalarResolverCommand",
+      "binding_source": "#[AsCommand(name: 'flexible_graphql:generate-scalar-resolver')] and console.command tag registration",
+      "related_module_ids": [
+        "mod.codegen-commands"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.cli.codegen"
+      ],
+      "evidence": [
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "ep.cli.generate-type-registry",
+      "type": "cli",
+      "framework": "Symfony Console",
+      "file_path": "src/Command/GenerateTypeRegistryCommand.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\Command\\GenerateTypeRegistryCommand",
+      "binding_source": "#[AsCommand(name: 'flexible_graphql:generate-type-registry')] and console.command tag registration",
+      "related_module_ids": [
+        "mod.codegen-commands",
+        "mod.generated-code-contract"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.cli.codegen"
+      ],
+      "evidence": [
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "workers": [],
+  "schedulers": [],
+  "ui_bootstraps": [],
+  "webhooks": [],
+  "integration_receivers": [
+    {
+      "id": "ep.integration.bundle-extension-load",
+      "type": "integration_receiver",
+      "framework": "Symfony DependencyInjection Extension",
+      "file_path": "src/DependencyInjection/FlexibleGraphqlExtension.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\DependencyInjection\\FlexibleGraphqlExtension::load",
+      "binding_source": "Symfony bundle extension load() when bundle configuration is processed",
+      "related_module_ids": [
+        "mod.bundle-bootstrap",
+        "mod.generated-code-contract"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract",
+        "cfg.bundle.service-definitions"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.integration.bundle-config-load"
+      ],
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "ep.integration.bundle-extension-process",
+      "type": "integration_receiver",
+      "framework": "Symfony compiler pass style process hook",
+      "file_path": "src/DependencyInjection/FlexibleGraphqlExtension.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\DependencyInjection\\FlexibleGraphqlExtension::process",
+      "binding_source": "CompilerPassInterface::process implementation on the extension class",
+      "related_module_ids": [
+        "mod.bundle-bootstrap"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.integration.bundle-compiler-pass"
+      ],
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ],
+      "confidence": 0.58
+    }
+  ],
+  "background": [
+    {
+      "id": "ep.background.schema-cache-warmer",
+      "type": "worker",
+      "framework": "Symfony CacheWarmerInterface",
+      "file_path": "src/CacheWarmer/SchemaCacheWarmer.php",
+      "symbol": "Axtiva\\FlexibleGraphqlBundle\\CacheWarmer\\SchemaCacheWarmer::warmUp",
+      "binding_source": "kernel.cache_warmer tag registered in FlexibleGraphqlExtension::setCompilerCacheWarmer",
+      "related_module_ids": [
+        "mod.cache-warming",
+        "mod.generated-code-contract"
+      ],
+      "related_config_ids": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surface_ids": [
+        "rs.background.cache-warm"
+      ],
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "confidence": 0.99
+    }
+  ]
+}

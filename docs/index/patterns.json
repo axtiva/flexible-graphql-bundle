@@ -1,0 +1,150 @@
+{
+  "naming_patterns": [
+    {
+      "pattern": "Command classes use Generate*Command naming and flexible_graphql:* command names.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "pattern": "Service IDs and tags use the flexible_graphql.* prefix.",
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml"
+      ]
+    },
+    {
+      "pattern": "Configuration root is flexible_graphql and consumer-facing sample config is YAML.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    }
+  ],
+  "feature_structure_patterns": [
+    {
+      "pattern": "Feature additions usually require coordinated changes across Configuration.php, FlexibleGraphqlExtension.php, sample YAML, and docs.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "pattern": "Generation features are wired via DI and executed either through cache warm or explicit console commands.",
+      "evidence": [
+        "README.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "error_handling_patterns": [
+    {
+      "pattern": "CLI commands return Command::FAILURE when requested schema elements are missing and emit SymfonyStyle errors.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php"
+      ]
+    },
+    {
+      "pattern": "Default field resolution falls back to PropertyAccessor when GraphQL defaultFieldResolver returns null.",
+      "evidence": [
+        "src/Resolver/DefaultResolver.php"
+      ]
+    }
+  ],
+  "formatting_tooling_patterns": [
+    {
+      "pattern": "PHP files declare strict_types=1 except the Bundle class file.",
+      "evidence": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resolver/DefaultResolver.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    },
+    {
+      "pattern": "No in-repo formatter, linter, or static-analysis config file is present; PHPStan is only mentioned in CHANGELOG.md.",
+      "evidence": [
+        "CHANGELOG.md",
+        "composer.json"
+      ]
+    }
+  ],
+  "dependency_usage_patterns": [
+    {
+      "pattern": "Bundle delegates schema parsing and code generation to axtiva/flexible-graphql-php builders instead of implementing its own generator logic.",
+      "evidence": [
+        "composer.json",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "pattern": "Symfony PropertyAccess is used to implement a default GraphQL field resolver fallback.",
+      "evidence": [
+        "composer.json",
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml"
+      ]
+    }
+  ],
+  "testing_patterns": [
+    {
+      "pattern": "phpunit/phpunit is required in composer.json, but no test files or phpunit.xml are present in the repository snapshot.",
+      "evidence": [
+        "composer.json",
+        "CHANGELOG.md"
+      ]
+    }
+  ],
+  "configuration_patterns": [
+    {
+      "pattern": "schema_type gates federation-specific builder selection and representation wiring.",
+      "evidence": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ]
+    },
+    {
+      "pattern": "executor selects sync or async amphp type-registry builder implementations.",
+      "evidence": [
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "CHANGELOG.md"
+      ]
+    }
+  ],
+  "evidence": [
+    "CHANGELOG.md",
+    "composer.json",
+    "docs/index.md",
+    "README.md",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/Resolver/DefaultResolver.php",
+    "src/Resources/config/flexible_graphql.yaml",
+    "src/Resources/config/services.yaml"
+  ]
+}

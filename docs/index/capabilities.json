@@ -1,0 +1,354 @@
+{
+  "capabilities": [
+    {
+      "capability_id": "cap.codegen.graphql-artifact-generation",
+      "name": "GraphQL artifact generation from SDL",
+      "category": "codegen",
+      "workspace_scope": "ws.bundle-core",
+      "description": "The bundle can generate GraphQL type classes and a TypeRegistry from SDL files using cache warming or a direct console command.",
+      "best_for_tasks": [
+        "refresh_generated_graphql_code",
+        "add_new_graphql_type_support",
+        "validate_schema_generation_flow"
+      ],
+      "preconditions": [
+        "Consumer app provides flexible_graphql.schema_files and flexible_graphql.dir.",
+        "Bundle is installed in a Symfony app or dependencies are available for development inspection."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/framework-guides.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.cache-clear"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract",
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "related_runtime_surfaces": [
+        "rs.background.cache-warm",
+        "rs.cli.codegen"
+      ],
+      "agent_usefulness": "High for tasks that need generation flow understanding with minimal file scanning.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "capability_id": "cap.codegen.resolver-scaffolding",
+      "name": "Directive, field, and scalar resolver scaffolding",
+      "category": "codegen",
+      "workspace_scope": "ws.bundle-core",
+      "description": "The bundle exposes CLI commands that generate resolver skeletons for directives, object fields, and custom scalars found in SDL.",
+      "best_for_tasks": [
+        "add_directive_resolver",
+        "add_field_resolver",
+        "add_scalar_resolver"
+      ],
+      "preconditions": [
+        "Consumer app bin/console is available.",
+        "Target schema element exists in the configured SDL."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/commands.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.cli.codegen"
+      ],
+      "agent_usefulness": "High when a task requests minimal-change scaffolding based on existing SDL.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "capability_id": "cap.config.consumer-config-contract",
+      "name": "Consumer-facing bundle configuration contract",
+      "category": "configuration",
+      "workspace_scope": "ws.bundle-core",
+      "description": "The repository defines a flexible_graphql config tree with schema_type, executor, schema_files, dir, namespace, enable_preload, default_resolver, and template_language_version options.",
+      "best_for_tasks": [
+        "change_bundle_defaults",
+        "investigate_config_behavior",
+        "document_consumer_setup"
+      ],
+      "preconditions": [
+        "Read Configuration.php and compare it to sample YAML/docs before making changes."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/configs.json",
+        "docs/index/reference-guides.json",
+        "docs/index/change-impact.json"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract",
+        "cfg.bundle.sample-flexible-graphql-doc"
+      ],
+      "related_runtime_surfaces": [
+        "rs.integration.bundle-config-load",
+        "rs.background.cache-warm"
+      ],
+      "agent_usefulness": "High for preventing incomplete config changes and doc drift.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "capability_id": "cap.di.bundle-service-wiring",
+      "name": "Bundle service wiring and resolver tagging",
+      "category": "dependency-injection",
+      "workspace_scope": "ws.bundle-core",
+      "description": "FlexibleGraphqlExtension wires builders, aliases, commands, and cache warmer, and includes resolver auto-tagging logic in process().",
+      "best_for_tasks": [
+        "change_service_registration",
+        "add_new_resolver_interface_support",
+        "debug_bundle_boot_sequence"
+      ],
+      "preconditions": [
+        "Read both load() and process() code paths.",
+        "Check reduced-confidence notes around compiler-pass registration."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/architecture.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json"
+      ],
+      "related_commands": [],
+      "related_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.integration.bundle-config-load",
+        "rs.integration.bundle-compiler-pass"
+      ],
+      "agent_usefulness": "High for backend wiring changes; medium confidence for process()-only behaviors until consumer registration is verified.",
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/services.yaml",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    },
+    {
+      "capability_id": "cap.integration.cache-warmer",
+      "name": "Symfony cache warmer integration",
+      "category": "runtime",
+      "workspace_scope": "ws.bundle-core",
+      "description": "The bundle registers SchemaCacheWarmer as kernel.cache_warmer to regenerate GraphQL artifacts during Symfony cache warm.",
+      "best_for_tasks": [
+        "debug_generated_code_refresh",
+        "validate_generation_on_boot",
+        "change_generation_timing"
+      ],
+      "preconditions": [
+        "Need a consuming Symfony app to execute cache:clear."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/runtime-surfaces.json",
+        "docs/index/reference-guides.json",
+        "docs/index/testing.json"
+      ],
+      "related_commands": [
+        "cmd.consumer.cache-clear"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.background.cache-warm"
+      ],
+      "agent_usefulness": "High for tracing generation lifecycle from framework boot to generated files.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "capability_id": "cap.integration.command-registration",
+      "name": "Symfony console command registration",
+      "category": "runtime",
+      "workspace_scope": "ws.bundle-core",
+      "description": "The extension registers console command services and exposes them under the flexible_graphql namespace in host apps.",
+      "best_for_tasks": [
+        "inspect_available_generator_commands",
+        "add_new_command",
+        "trace_cli_entrypoint"
+      ],
+      "preconditions": [
+        "Bundle must be installed in a host app to run bin/console list flexible_graphql."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/commands.json",
+        "docs/index/entrypoints.json",
+        "docs/index/reference-guides.json"
+      ],
+      "related_commands": [
+        "cmd.consumer.list-flexible-graphql",
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.cli.codegen"
+      ],
+      "agent_usefulness": "High for entrypoint discovery and targeted generation tasks.",
+      "evidence": [
+        "README.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "capability_id": "cap.integration.federation-aware-generation",
+      "name": "Federation-aware schema generation",
+      "category": "graphql",
+      "workspace_scope": "ws.bundle-core",
+      "description": "When schema_type is federation, the bundle chooses federated builders and extends the schema AST during cache warm before generation.",
+      "best_for_tasks": [
+        "add_federation_support",
+        "debug_federation_schema_generation",
+        "change_builder_selection_logic"
+      ],
+      "preconditions": [
+        "Read schema_type branches in Configuration.php, FlexibleGraphqlExtension.php, and SchemaCacheWarmer.php."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/framework-guides.json",
+        "docs/index/reference-guides.json",
+        "docs/index/task-recipes.json"
+      ],
+      "related_commands": [
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.cache-clear"
+      ],
+      "related_configs": [
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.background.cache-warm",
+        "rs.cli.codegen"
+      ],
+      "agent_usefulness": "High for Apollo Federation related tasks in this bundle.",
+      "evidence": [
+        "README.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "capability_id": "cap.runtime.default-resolver-fallback",
+      "name": "Default resolver fallback via PropertyAccess",
+      "category": "runtime",
+      "workspace_scope": "ws.bundle-core",
+      "description": "DefaultResolver uses GraphQL's default field resolver first and falls back to Symfony PropertyAccess when null is returned.",
+      "best_for_tasks": [
+        "change_default_field_resolution",
+        "debug_missing_field_value_behavior",
+        "swap_default_resolver_service"
+      ],
+      "preconditions": [
+        "Read DefaultResolver.php and services.yaml together."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/modules.json",
+        "docs/index/reference-guides.json"
+      ],
+      "related_commands": [],
+      "related_configs": [
+        "cfg.bundle.service-definitions",
+        "cfg.bundle.user-config-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.integration.bundle-config-load"
+      ],
+      "agent_usefulness": "Medium-high for resolver-behavior tasks.",
+      "evidence": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "capability_id": "cap.local.repo-inspection",
+      "name": "Composer-based local repository setup",
+      "category": "local-dev",
+      "workspace_scope": "ws.bundle-core",
+      "description": "Repository-local setup evidence is limited to composer.json dependency installation; no standalone boot, docker, or CI automation is present.",
+      "best_for_tasks": [
+        "inspect_vendor_types",
+        "prepare_local_php_environment"
+      ],
+      "preconditions": [
+        "Composer available locally."
+      ],
+      "where_to_read_before_use": [
+        "docs/index/commands.json",
+        "docs/index/workflows.json"
+      ],
+      "related_commands": [
+        "cmd.repo.composer-install-deps"
+      ],
+      "related_configs": [
+        "cfg.bundle.manifest",
+        "cfg.bundle.repo-ignore"
+      ],
+      "related_runtime_surfaces": [
+        "rs.local-dev.consumer-setup"
+      ],
+      "agent_usefulness": "Medium; useful for local dependency availability, not for end-to-end bundle execution.",
+      "evidence": [
+        "composer.json",
+        ".gitignore"
+      ]
+    },
+    {
+      "capability_id": "cap.repo.mcp-references",
+      "name": "MCP references configured in repo",
+      "category": "tooling",
+      "workspace_scope": "ws.bundle-core",
+      "description": "Not found",
+      "best_for_tasks": "Not found",
+      "preconditions": "Not found",
+      "where_to_read_before_use": "Not found",
+      "related_commands": "Not found",
+      "related_configs": "Not found",
+      "related_runtime_surfaces": "Not found",
+      "agent_usefulness": "Not found",
+      "evidence": []
+    }
+  ]
+}

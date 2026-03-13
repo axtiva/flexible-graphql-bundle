@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
                 )->isRequired())
                 ->append($this->addScalar(
                     'template_language_version',
-                    '7.4',
+                    '8.3',
                     'PHP version of templates for php code'
                 ))
                 ->append($this->addScalar(
@@ -56,7 +56,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('schema_type', 'enum');
 
-        /** @var EnumNodeDefinition $node */
+        /** @var EnumNodeDefinition<null> $node */
         $node = $treeBuilder->getRootNode();
 
         $node
@@ -72,7 +72,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('executor', 'enum');
 
-        /** @var EnumNodeDefinition $node */
+        /** @var EnumNodeDefinition<null> $node */
         $node = $treeBuilder->getRootNode();
 
         $node
@@ -88,7 +88,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('enable_preload', 'boolean');
 
-        /** @var BooleanNodeDefinition $node */
+        /** @var BooleanNodeDefinition<null> $node */
         $node = $treeBuilder->getRootNode();
 
         $node
@@ -129,7 +129,11 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    private function addScalar(string $name, $default = null, string $info = null): ScalarNodeDefinition
+    private function addScalar(
+        string $name,
+        string|int|float|bool|null $default = null,
+        ?string $info = null
+    ): ScalarNodeDefinition
     {
         $builder = new TreeBuilder($name, 'scalar');
 

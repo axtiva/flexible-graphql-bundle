@@ -1,0 +1,97 @@
+{
+  "configs": [
+    {
+      "config_id": "cfg.bundle.manifest",
+      "path": "composer.json",
+      "kind": "package-manifest",
+      "scope": "repository",
+      "short_purpose": "Defines package metadata, PHP/runtime requirements, autoloading, and dev dependency on PHPUnit.",
+      "sensitive": false,
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.consumer-guidance"
+      ],
+      "related_runtime_surfaces": [
+        "rs.local-dev.consumer-setup"
+      ],
+      "evidence": [
+        "composer.json"
+      ]
+    },
+    {
+      "config_id": "cfg.bundle.service-definitions",
+      "path": "src/Resources/config/services.yaml",
+      "kind": "symfony-service-config",
+      "scope": "bundle-internal",
+      "short_purpose": "Defines bundle-internal service defaults, property accessor services, and the public default resolver alias.",
+      "sensitive": false,
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.default-resolution"
+      ],
+      "related_runtime_surfaces": [
+        "rs.integration.bundle-config-load"
+      ],
+      "evidence": [
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "config_id": "cfg.bundle.user-config-contract",
+      "path": "src/DependencyInjection/Configuration.php",
+      "kind": "symfony-config-tree",
+      "scope": "consumer-facing",
+      "short_purpose": "Defines supported flexible_graphql options, defaults, and enum choices for consumer apps.",
+      "sensitive": false,
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.generated-code-contract"
+      ],
+      "related_runtime_surfaces": [
+        "rs.integration.bundle-config-load",
+        "rs.cli.codegen",
+        "rs.background.cache-warm"
+      ],
+      "evidence": [
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "config_id": "cfg.bundle.sample-flexible-graphql-doc",
+      "path": "src/Resources/config/flexible_graphql.yaml",
+      "kind": "sample-config",
+      "scope": "consumer-facing-example",
+      "short_purpose": "Provides a sample flexible_graphql YAML snippet used by documentation and packaging.",
+      "sensitive": false,
+      "related_modules": [
+        "mod.generated-code-contract",
+        "mod.consumer-guidance"
+      ],
+      "related_runtime_surfaces": [
+        "rs.local-dev.consumer-setup"
+      ],
+      "evidence": [
+        "src/Resources/config/flexible_graphql.yaml",
+        "README.md"
+      ]
+    },
+    {
+      "config_id": "cfg.bundle.repo-ignore",
+      "path": ".gitignore",
+      "kind": "repository-ignore",
+      "scope": "repository",
+      "short_purpose": "Ignores IDE metadata, vendor/, and composer.lock from version control.",
+      "sensitive": false,
+      "related_modules": [
+        "mod.consumer-guidance"
+      ],
+      "related_runtime_surfaces": [
+        "rs.local-dev.consumer-setup"
+      ],
+      "evidence": [
+        ".gitignore"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-03-13T09:15:02+00:00",
+  "generator": {
+    "name": "coder.index",
+    "model": "github-copilot/gpt-5.4",
+    "mode": "index",
+    "plan_id": "plan-kb-20260313-091502z",
+    "repository_commit": "559cada1ab2a70eca97d70dd9188ad1aaa3f29c0",
+    "repository_branch": "upgrade"
+  },
+  "repository_summary": {
+    "name": "axtiva/flexible-graphql-bundle",
+    "kind": "single-package library",
+    "purpose": "Symfony bundle that generates PHP GraphQL types, registries, and resolver stubs from SDL for host Symfony applications.",
+    "primary_workspace_id": "ws.bundle-core",
+    "evidence": [
+      "README.md",
+      "composer.json",
+      "src/Command/GenerateTypeRegistryCommand.php",
+      "src/DependencyInjection/FlexibleGraphqlExtension.php"
+    ]
+  },
+  "detected_stack_summary": {
+    "languages": [
+      "PHP 8.3+"
+    ],
+    "package_manager": "Composer",
+    "frameworks": [
+      "Symfony Config",
+      "Symfony DependencyInjection",
+      "Symfony Framework Bundle"
+    ],
+    "graphql": "Schema-first bundle integration via axtiva/flexible-graphql-php.",
+    "primary_runtime": "Host Symfony application consuming this bundle",
+    "evidence": [
+      "README.md",
+      "composer.json",
+      "src/FlexibleGraphqlBundle.php",
+      "src/DependencyInjection/Configuration.php",
+      "src/DependencyInjection/FlexibleGraphqlExtension.php"
+    ]
+  },
+  "pointers": {
+    "architecture": "docs/index/architecture.json",
+    "capabilities": "docs/index/capabilities.json",
+    "change_impact": "docs/index/change-impact.json",
+    "commands": "docs/index/commands.json",
+    "configs": "docs/index/configs.json",
+    "dependencies": "docs/index/dependencies.json",
+    "entrypoints": "docs/index/entrypoints.json",
+    "evidence_map": "docs/index/evidence-map.json",
+    "framework_guides": "docs/index/framework-guides.json",
+    "manual_notes": "docs/index/manual-notes.json",
+    "manual_overrides": "docs/index/manual-overrides.json",
+    "manual_playbooks": "docs/index/manual-playbooks.json",
+    "modules": "docs/index/modules.json",
+    "navigation": "docs/index/navigation.json",
+    "overview": "docs/index/overview.json",
+    "patterns": "docs/index/patterns.json",
+    "reference_guides": "docs/index/reference-guides.json",
+    "runtime_surfaces": "docs/index/runtime-surfaces.json",
+    "skills_registry": "docs/index/skills-registry.json",
+    "task_recipes": "docs/index/task-recipes.json",
+    "testing": "docs/index/testing.json",
+    "workflows": "docs/index/workflows.json",
+    "workspaces": "docs/index/workspaces.json"
+  },
+  "navigation_root": "docs/index/navigation.json",
+  "reindex_metadata": {
+    "mode": "index",
+    "previous_kb_present": false,
+    "preserved_manual_files": [],
+    "id_stability_strategy": "Fresh generation; stable IDs derive from fixed paths and stable repository concepts.",
+    "repository_commit": "559cada1ab2a70eca97d70dd9188ad1aaa3f29c0",
+    "repository_branch": "upgrade"
+  },
+  "drift_summary": "Not found",
+  "shard_inventory": [
+    "docs/index/architecture.json",
+    "docs/index/capabilities.json",
+    "docs/index/change-impact.json",
+    "docs/index/commands.json",
+    "docs/index/configs.json",
+    "docs/index/dependencies.json",
+    "docs/index/entrypoints.json",
+    "docs/index/evidence-map.json",
+    "docs/index/framework-guides.json",
+    "docs/index/index.json",
+    "docs/index/manual-notes.json",
+    "docs/index/manual-overrides.json",
+    "docs/index/manual-playbooks.json",
+    "docs/index/modules.json",
+    "docs/index/navigation.json",
+    "docs/index/overview.json",
+    "docs/index/patterns.json",
+    "docs/index/reference-guides.json",
+    "docs/index/runtime-surfaces.json",
+    "docs/index/skills-registry.json",
+    "docs/index/task-recipes.json",
+    "docs/index/testing.json",
+    "docs/index/workflows.json",
+    "docs/index/workspaces.json"
+  ],
+  "operational_coverage_summary": {
+    "covered_intents": [
+      "add_backend_feature",
+      "choose_relevant_skills",
+      "identify_entrypoints",
+      "implement_user_story",
+      "investigate_config",
+      "plan_testing_scope",
+      "run_build_or_tests",
+      "trace_runtime_flow"
+    ],
+    "supported_change_areas": [
+      "Bundle config contract",
+      "Cache warmer generation path",
+      "Console code generation commands",
+      "Default resolver behavior",
+      "Dependency injection wiring",
+      "Federation and executor selection"
+    ],
+    "unsupported_or_missing_areas": {
+      "ci_files": "Not found",
+      "docker_files": "Not found",
+      "in_repo_migrations": "Not found",
+      "in_repo_mobile_workspace": "Not found",
+      "in_repo_test_tree": "Not found",
+      "in_repo_ui_workspace": "Not found"
+    },
+    "weak_or_inconsistent_areas": [
+      "Configuration::enable_preload defaults to true, while bundled sample YAML and docs examples set false.",
+      "Configuration::template_language_version defaults to 7.4, while composer.json requires PHP ^8.3.",
+      "FlexibleGraphqlExtension contains process()-based resolver tagging logic, but the local Bundle class shows no build() override that registers the extension as a compiler pass."
+    ],
+    "evidence": [
+      "README.md",
+      "composer.json",
+      "docs/index.md",
+      "src/DependencyInjection/Configuration.php",
+      "src/DependencyInjection/FlexibleGraphqlExtension.php",
+      "src/FlexibleGraphqlBundle.php",
+      "src/Resources/config/flexible_graphql.yaml"
+    ]
+  },
+  "skill_coverage_summary": {
+    "emitted_skill_ids": [
+      "skill.external.graphql-architect",
+      "skill.external.php-async",
+      "skill.external.php-graphql",
+      "skill.external.php-symfony",
+      "skill.external.php-tester"
+    ],
+    "omitted_skill_count": 20,
+    "selection_rule": "Only externally supplied skills with applicability_score >= 0.5 were emitted.",
+    "evidence": [
+      "README.md",
+      "composer.json",
+      "src/DependencyInjection/Configuration.php",
+      "src/DependencyInjection/FlexibleGraphqlExtension.php"
+    ]
+  }
+}

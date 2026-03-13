@@ -1,3 +1,12 @@
+3.0.0
+
+- Upgrade base lib to 3.0 with breaking changes
+- Add support symfony v8
+- Add support php v8.3
+- remove support php v7.4
+- add Tests for integration and code generation
+- add PHPStan level 6
+
 2.2.0
 
 - Add support symfony v7

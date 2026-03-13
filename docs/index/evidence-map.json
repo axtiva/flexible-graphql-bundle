@@ -1,0 +1,222 @@
+{
+  "claims": [
+    {
+      "claim_id": "claim.arch.bundle-style",
+      "shard": "docs/index/architecture.json",
+      "record_id": "root",
+      "evidence_paths": [
+        "composer.json",
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.cap.cache-warmer",
+      "shard": "docs/index/capabilities.json",
+      "record_id": "cap.integration.cache-warmer",
+      "evidence_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.command.type-registry",
+      "shard": "docs/index/commands.json",
+      "record_id": "cmd.bundle.generate-type-registry",
+      "evidence_paths": [
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.config.default-drift",
+      "shard": "docs/index/index.json",
+      "record_id": "operational_coverage_summary",
+      "evidence_paths": [
+        "composer.json",
+        "README.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "claim_id": "claim.config.tree",
+      "shard": "docs/index/configs.json",
+      "record_id": "cfg.bundle.user-config-contract",
+      "evidence_paths": [
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "claim_id": "claim.dependency.flexible-graphql-php",
+      "shard": "docs/index/dependencies.json",
+      "record_id": "axtiva/flexible-graphql-php",
+      "evidence_paths": [
+        "composer.json",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.entrypoint.cache-warmer",
+      "shard": "docs/index/entrypoints.json",
+      "record_id": "ep.background.schema-cache-warmer",
+      "evidence_paths": [
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.entrypoint.commands",
+      "shard": "docs/index/entrypoints.json",
+      "record_id": "ep.cli.generate-type-registry",
+      "evidence_paths": [
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.framework.cache-warmer-guide",
+      "shard": "docs/index/framework-guides.json",
+      "record_id": "guide.framework.symfony-cache-warmer",
+      "evidence_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.module.codegen",
+      "shard": "docs/index/modules.json",
+      "record_id": "mod.codegen-commands",
+      "evidence_paths": [
+        "README.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.module.default-resolver",
+      "shard": "docs/index/modules.json",
+      "record_id": "mod.default-resolution",
+      "evidence_paths": [
+        "README.md",
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "claim_id": "claim.navigation.no-broad-scan",
+      "shard": "docs/index/navigation.json",
+      "record_id": "fallback_scan_policy",
+      "evidence_paths": [
+        "AGENTS.md"
+      ]
+    },
+    {
+      "claim_id": "claim.overview.bundle-purpose",
+      "shard": "docs/index/overview.json",
+      "record_id": "root",
+      "evidence_paths": [
+        "README.md",
+        "composer.json"
+      ]
+    },
+    {
+      "claim_id": "claim.patterns.phpunit-declared-only",
+      "shard": "docs/index/patterns.json",
+      "record_id": "testing_patterns",
+      "evidence_paths": [
+        "composer.json",
+        "CHANGELOG.md"
+      ]
+    },
+    {
+      "claim_id": "claim.recipe.config-change",
+      "shard": "docs/index/task-recipes.json",
+      "record_id": "recipe.change-config-contract",
+      "evidence_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "claim_id": "claim.reference.extension",
+      "shard": "docs/index/reference-guides.json",
+      "record_id": "ref.framework.extension",
+      "evidence_paths": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.runtime.consumer-boundary",
+      "shard": "docs/index/runtime-surfaces.json",
+      "record_id": "rs.http.consumer-doc-example",
+      "evidence_paths": [
+        "docs/index.md",
+        "README.md"
+      ]
+    },
+    {
+      "claim_id": "claim.skills.php-graphql-best-fit",
+      "shard": "docs/index/skills-registry.json",
+      "record_id": "skill.external.php-graphql",
+      "evidence_paths": [
+        "README.md",
+        "composer.json",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.testing.no-tests-found",
+      "shard": "docs/index/testing.json",
+      "record_id": "test_roots",
+      "evidence_paths": [
+        "composer.json"
+      ]
+    },
+    {
+      "claim_id": "claim.workflow.cache-clear",
+      "shard": "docs/index/workflows.json",
+      "record_id": "wf.consumer.refresh-generated-code-via-cache-clear",
+      "evidence_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.workspace.single-bundle",
+      "shard": "docs/index/workspaces.json",
+      "record_id": "ws.bundle-core",
+      "evidence_paths": [
+        "README.md",
+        "composer.json",
+        "docs/index.md",
+        "src/FlexibleGraphqlBundle.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "claim_id": "claim.change-impact.compiler-pass-uncertainty",
+      "shard": "docs/index/change-impact.json",
+      "record_id": "impact.compiler-pass-uncertainty",
+      "evidence_paths": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    }
+  ]
+}

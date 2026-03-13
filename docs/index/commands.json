@@ -1,0 +1,215 @@
+{
+  "commands": [
+    {
+      "command_id": "cmd.bundle.generate-directive-resolver",
+      "command_text": "bin/console flexible_graphql:generate-directive-resolver <directive_name>",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Generate a directive resolver skeleton for a directive defined in the configured GraphQL SDL.",
+      "source": "src/Command/GenerateDirectiveResolverCommand.php",
+      "validation_level": "targeted_generation",
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "requires_services": [
+        "Host Symfony console runtime",
+        "Configured schema_files path",
+        "Configured generation target dir"
+      ],
+      "recommended_when": [
+        "Adding support for an executable GraphQL directive.",
+        "Need to scaffold a directive resolver class from schema SDL."
+      ],
+      "avoid_when": [
+        "Running inside this repository without a consumer app.",
+        "The target directive is not present in the configured schema."
+      ],
+      "expected_outcome": "Writes generated directive resolver file(s) and prints filenames; returns failure if the directive is missing.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.bundle.generate-field-resolver",
+      "command_text": "bin/console flexible_graphql:generate-field-resolver <type_name> <field_name>",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Generate field resolver skeleton file(s) for a specific object type field from schema SDL.",
+      "source": "src/Command/GenerateFieldResolverCommand.php",
+      "validation_level": "targeted_generation",
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "requires_services": [
+        "Host Symfony console runtime",
+        "Configured schema_files path",
+        "Configured generation target dir"
+      ],
+      "recommended_when": [
+        "Adding custom behavior for one GraphQL object field.",
+        "Need a resolver scaffold matching schema-defined type and field names."
+      ],
+      "avoid_when": [
+        "Running inside this repository without a consumer app.",
+        "The target type or field does not exist in SDL."
+      ],
+      "expected_outcome": "Writes generated field resolver file(s) and prints filenames; returns failure when the type or field is missing.",
+      "evidence": [
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.bundle.generate-scalar-resolver",
+      "command_text": "bin/console flexible_graphql:generate-scalar-resolver <custom_scalar_name>",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Generate a custom scalar resolver for a scalar defined in schema SDL.",
+      "source": "src/Command/GenerateScalarResolverCommand.php",
+      "validation_level": "targeted_generation",
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "requires_services": [
+        "Host Symfony console runtime",
+        "Configured schema_files path",
+        "Configured generation target dir"
+      ],
+      "recommended_when": [
+        "Adding a custom scalar to the schema.",
+        "Need scalar resolver scaffold from existing SDL."
+      ],
+      "avoid_when": [
+        "Running inside this repository without a consumer app.",
+        "The named scalar is not present in SDL."
+      ],
+      "expected_outcome": "Writes generated scalar resolver file and prints filename; returns failure when the scalar is missing.",
+      "evidence": [
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.bundle.generate-type-registry",
+      "command_text": "bin/console flexible_graphql:generate-type-registry",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Generate all type classes and the TypeRegistry class from the configured schema SDL.",
+      "source": "src/Command/GenerateTypeRegistryCommand.php",
+      "validation_level": "generation",
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "requires_services": [
+        "Host Symfony console runtime",
+        "Configured schema_files path",
+        "Configured generation target dir"
+      ],
+      "recommended_when": [
+        "Refreshing generated GraphQL code without invoking cache:clear.",
+        "Validating generation for all schema types."
+      ],
+      "avoid_when": [
+        "Running inside this repository without a consumer app.",
+        "The host app has not configured flexible_graphql yet."
+      ],
+      "expected_outcome": "Generates all type code, writes the TypeRegistry class file, and prints output filenames.",
+      "evidence": [
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.consumer.cache-clear",
+      "command_text": "bin/console cache:clear",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Recommended consumer-app path to regenerate GraphQL artifacts through the registered cache warmer.",
+      "source": "README.md and docs/index.md",
+      "validation_level": "generation_and_framework_boot",
+      "safe_to_run_local": false,
+      "mutates_state": true,
+      "requires_services": [
+        "Host Symfony app using this bundle",
+        "Bundle registered in the host app",
+        "Configured schema_files path",
+        "Configured generation target dir"
+      ],
+      "recommended_when": [
+        "Following the documented setup flow.",
+        "Need generated code refreshed during Symfony cache warm."
+      ],
+      "avoid_when": [
+        "Running in this repository without a host app."
+      ],
+      "expected_outcome": "Symfony cache clear triggers SchemaCacheWarmer and refreshes generated GraphQL artifacts in the consumer target directory.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.consumer.list-flexible-graphql",
+      "command_text": "bin/console list flexible_graphql",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "List the flexible_graphql console commands exposed by the bundle in a consumer app.",
+      "source": "README.md",
+      "validation_level": "discovery",
+      "safe_to_run_local": false,
+      "mutates_state": false,
+      "requires_services": [
+        "Host Symfony console runtime",
+        "Bundle installed and registered"
+      ],
+      "recommended_when": [
+        "Verifying command namespace registration in a consumer app.",
+        "Discovering available generation commands."
+      ],
+      "avoid_when": [
+        "Running in this repository without a host app."
+      ],
+      "expected_outcome": "Displays the flexible_graphql command namespace and registered commands in the host Symfony console.",
+      "evidence": [
+        "README.md",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "command_id": "cmd.repo.composer-install-deps",
+      "command_text": "composer install",
+      "workspace_scope": "ws.bundle-core",
+      "purpose": "Install PHP dependencies declared by composer.json for local inspection or development of the bundle.",
+      "source": "composer.json",
+      "validation_level": "environment_setup",
+      "safe_to_run_local": true,
+      "mutates_state": true,
+      "requires_services": [],
+      "recommended_when": [
+        "Preparing a local environment for repository development.",
+        "Need package versions available under vendor/."
+      ],
+      "avoid_when": [
+        "A read-only review is sufficient and vendor/ is not needed."
+      ],
+      "expected_outcome": "Installs Symfony and GraphQL PHP dependencies under vendor/ according to composer.json.",
+      "evidence": [
+        "composer.json",
+        "README.md"
+      ]
+    }
+  ],
+  "category_index": {
+    "build": "Not found",
+    "run": [
+      "cmd.consumer.cache-clear",
+      "cmd.consumer.list-flexible-graphql"
+    ],
+    "lint": "Not found",
+    "static_analysis": "Not found",
+    "test": "Not found",
+    "migration": "Not found",
+    "codegen": [
+      "cmd.bundle.generate-directive-resolver",
+      "cmd.bundle.generate-field-resolver",
+      "cmd.bundle.generate-scalar-resolver",
+      "cmd.bundle.generate-type-registry"
+    ],
+    "utility_scripts": [
+      "cmd.repo.composer-install-deps"
+    ]
+  }
+}

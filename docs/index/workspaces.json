@@ -1,0 +1,73 @@
+{
+  "workspaces": [
+    {
+      "id": "ws.bundle-core",
+      "root_path": ".",
+      "manifests": [
+        "composer.json"
+      ],
+      "language_runtime": {
+        "language": "PHP",
+        "version_constraint": "^8.3",
+        "package_manager": "Composer"
+      },
+      "role": "Symfony reusable bundle/library",
+      "boundaries": {
+        "contains": [
+          "bundle bootstrap class",
+          "cache warmer",
+          "console generator commands",
+          "dependency injection extension and config tree",
+          "default resolver service"
+        ],
+        "consumer_dependencies": [
+          "Host Symfony app configuration under flexible_graphql",
+          "Host GraphQL SDL files matched by schema_files",
+          "Host generated-code output directory matched by dir",
+          "Optional host HTTP controller as shown in docs/index.md"
+        ],
+        "in_repo_ui_workspace": "Not found",
+        "in_repo_mobile_workspace": "Not found",
+        "in_repo_persistence_layer": "Not found",
+        "standalone_http_app": "Not found"
+      },
+      "primary_commands": [
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver",
+        "cmd.bundle.generate-type-registry",
+        "cmd.consumer.cache-clear",
+        "cmd.consumer.list-flexible-graphql"
+      ],
+      "primary_runtime_surfaces": [
+        "rs.background.cache-warm",
+        "rs.cli.codegen",
+        "rs.deployment.preload-aware-generated-code",
+        "rs.local-dev.consumer-setup"
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.cache-warming",
+        "mod.codegen-commands",
+        "mod.consumer-guidance",
+        "mod.default-resolution"
+      ],
+      "evidence": [
+        "README.md",
+        "composer.json",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php",
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/flexible_graphql.yaml",
+        "src/Resources/config/services.yaml"
+      ]
+    }
+  ]
+}

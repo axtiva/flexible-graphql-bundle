@@ -1,0 +1,204 @@
+{
+  "test_roots": "Not found",
+  "test_types": [
+    {
+      "type": "phpunit-dependency-only",
+      "description": "composer.json requires phpunit/phpunit, but no in-repo test files or phpunit config were found in the repository snapshot.",
+      "evidence": [
+        "composer.json"
+      ]
+    },
+    {
+      "type": "consumer-app-generation-validation",
+      "description": "Documentation recommends validating generation by running bin/console cache:clear or generator commands in a consuming Symfony application.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    }
+  ],
+  "runners": [
+    {
+      "name": "PHPUnit",
+      "status": "dependency_declared_only",
+      "config": "Not found",
+      "evidence": [
+        "composer.json"
+      ]
+    }
+  ],
+  "configs": {
+    "phpunit": "Not found"
+  },
+  "fixtures_factories_base_classes": "Not found",
+  "conventions": [
+    {
+      "rule": "For bundle changes, minimal validation is usually a consumer-app generation run rather than a repo-local standalone test command.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ]
+    },
+    {
+      "rule": "When command argument validation changes, check the relevant command class failure path and success output behavior.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    }
+  ],
+  "workspace_mapping": [
+    {
+      "workspace_id": "ws.bundle-core",
+      "test_root": "Not found",
+      "available_validation_paths": [
+        "cmd.consumer.cache-clear",
+        "cmd.bundle.generate-type-registry",
+        "cmd.bundle.generate-directive-resolver",
+        "cmd.bundle.generate-field-resolver",
+        "cmd.bundle.generate-scalar-resolver"
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    }
+  ],
+  "task_to_test_recommendations": [
+    {
+      "task": "change_bundle_config_contract",
+      "recommended_validation": [
+        "Inspect Configuration.php, sample YAML, and docs for synchronization.",
+        "If a consumer app is available, run bin/console cache:clear.",
+        "If command behavior depends on the config, run the smallest affected flexible_graphql:* command."
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "task": "change_generator_command",
+      "recommended_validation": [
+        "Run the affected flexible_graphql:* command in a consumer app with representative SDL.",
+        "Confirm failure handling for missing directives/types/fields/scalars still returns Command::FAILURE where applicable."
+      ],
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "task": "change_cache_warmer_generation_flow",
+      "recommended_validation": [
+        "Run bin/console cache:clear in a consumer app.",
+        "Confirm generated TypeRegistry file and generated types are refreshed in the configured dir.",
+        "In federation-related changes, validate both graphql and federation schema_type branches if possible."
+      ],
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "module_to_test_mappings": [
+    {
+      "module_id": "mod.bundle-bootstrap",
+      "recommended_validation_scope": "Check config/docs synchronization and, when possible, a consumer-app boot or cache:clear.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "module_id": "mod.codegen-commands",
+      "recommended_validation_scope": "Run the narrowest affected flexible_graphql:* command in a consumer app.",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "module_id": "mod.cache-warming",
+      "recommended_validation_scope": "Run cache:clear in a consumer app and inspect generated artifacts.",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ]
+    },
+    {
+      "module_id": "mod.default-resolution",
+      "recommended_validation_scope": "Not found",
+      "evidence": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml"
+      ]
+    }
+  ],
+  "validation_scope_levels": [
+    {
+      "level": "docs_only",
+      "when": "README/docs/index.md synchronization changes only",
+      "evidence": [
+        "README.md",
+        "docs/index.md"
+      ]
+    },
+    {
+      "level": "targeted_command",
+      "when": "Single generator command behavior changes",
+      "evidence": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ]
+    },
+    {
+      "level": "consumer_cache_warm",
+      "when": "Generation flow, service wiring, or config contract changes",
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    }
+  ],
+  "fixture_and_factory_relevance": "Not found",
+  "evidence": [
+    "composer.json",
+    "README.md",
+    "docs/index.md",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/Resolver/DefaultResolver.php",
+    "CHANGELOG.md"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "axtiva/flexible-graphql-bundle",
+  "purpose": "Symfony bundle for schema-first GraphQL code generation in host Symfony applications.",
+  "stack": {
+    "language": "PHP",
+    "language_version_constraint": "^8.3",
+    "package_manager": "Composer",
+    "frameworks": [
+      "Symfony Config",
+      "Symfony DependencyInjection",
+      "Symfony Framework Bundle"
+    ],
+    "graphql_dependency": "axtiva/flexible-graphql-php"
+  },
+  "primary_runtime": "Host Symfony application consuming the bundle; this repository is not a standalone app.",
+  "frameworks": [
+    "Symfony bundle",
+    "Symfony console command integration",
+    "Symfony cache warmer integration"
+  ],
+  "root_manifests": [
+    "composer.json"
+  ],
+  "repository_style": {
+    "shape": "single-package Symfony bundle",
+    "source_layout": [
+      "src/CacheWarmer",
+      "src/Command",
+      "src/DependencyInjection",
+      "src/Resolver",
+      "src/Resources/config"
+    ],
+    "consumer_boundary": "The host app supplies GraphQL SDL files, generated-code destination, bundle config, and any HTTP controller.",
+    "autoload": "Axtiva\\FlexibleGraphqlBundle\\ => src/"
+  },
+  "primary_workflows_summary": [
+    {
+      "workflow_id": "wf.consumer.install-bundle",
+      "summary": "Install the bundle and add flexible_graphql config in a consuming Symfony app."
+    },
+    {
+      "workflow_id": "wf.consumer.refresh-generated-code-via-cache-clear",
+      "summary": "Run cache:clear in the consuming app to regenerate GraphQL artifacts via the cache warmer."
+    },
+    {
+      "workflow_id": "wf.consumer.generate-type-registry",
+      "summary": "Run the direct type-registry generator command when cache warm is not the preferred path."
+    },
+    {
+      "workflow_id": "wf.consumer.list-commands",
+      "summary": "Inspect the flexible_graphql command namespace exposed by the bundle."
+    }
+  ],
+  "operational_summary": {
+    "core_behaviors": [
+      "Processes flexible_graphql configuration and registers code-generator services, commands, and a cache warmer.",
+      "Generates all GraphQL types and a TypeRegistry class from SDL schema files.",
+      "Provides CLI scaffolding for directive, field, scalar, and type-registry generation.",
+      "Ships a default resolver backed by Symfony PropertyAccess for fallback field reads."
+    ],
+    "current_gaps": {
+      "ci_files": "Not found",
+      "docker_files": "Not found",
+      "in_repo_test_files": "Not found",
+      "mobile_workspace": "Not found",
+      "ui_workspace": "Not found"
+    },
+    "important_caveats": [
+      "Config defaults are not fully synchronized across Configuration.php, bundled sample YAML, and docs examples.",
+      "Most executable workflows require a consuming Symfony app with bin/console, not this repository alone."
+    ]
+  },
+  "evidence": [
+    "README.md",
+    "composer.json",
+    "docs/index.md",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/Resolver/DefaultResolver.php",
+    "src/Resources/config/flexible_graphql.yaml"
+  ]
+}

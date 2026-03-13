@@ -1,0 +1,97 @@
+{
+  "workspaces": [
+    {
+      "workspace_id": "ws.bundle-core",
+      "dependencies": [
+        {
+          "package_name": "axtiva/flexible-graphql-php",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "why_relevant": "Core schema builder, code generator builders, resolver interfaces, and federation helpers used throughout the bundle.",
+          "linked_capabilities": [
+            "cap.codegen.graphql-artifact-generation",
+            "cap.integration.federation-aware-generation"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/CacheWarmer/SchemaCacheWarmer.php",
+            "src/DependencyInjection/FlexibleGraphqlExtension.php"
+          ]
+        },
+        {
+          "package_name": "symfony/config",
+          "version": "^6.4 | ^7.0 | ^8.0",
+          "ecosystem": "composer",
+          "why_relevant": "Provides the configuration tree infrastructure for flexible_graphql options.",
+          "linked_capabilities": [
+            "cap.config.consumer-config-contract"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/DependencyInjection/Configuration.php"
+          ]
+        },
+        {
+          "package_name": "symfony/dependency-injection",
+          "version": "^6.4 | ^7.0 | ^8.0",
+          "ecosystem": "composer",
+          "why_relevant": "Enables service registration, aliases, tags, and extension-driven wiring used by the bundle.",
+          "linked_capabilities": [
+            "cap.di.bundle-service-wiring",
+            "cap.integration.command-registration"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/DependencyInjection/FlexibleGraphqlExtension.php",
+            "src/Resources/config/services.yaml"
+          ]
+        },
+        {
+          "package_name": "symfony/framework-bundle",
+          "version": "^6.4 | ^7.0 | ^8.0",
+          "ecosystem": "composer",
+          "why_relevant": "Makes this package a Symfony bundle and enables cache warmer and console integration in host apps.",
+          "linked_capabilities": [
+            "cap.integration.cache-warmer",
+            "cap.integration.command-registration"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/FlexibleGraphqlBundle.php",
+            "src/DependencyInjection/FlexibleGraphqlExtension.php"
+          ]
+        },
+        {
+          "package_name": "symfony/property-access",
+          "version": "^6.4 | ^7.0 | ^8.0",
+          "ecosystem": "composer",
+          "why_relevant": "Supports the default resolver's fallback property access behavior.",
+          "linked_capabilities": [
+            "cap.runtime.default-resolver-fallback"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/Resolver/DefaultResolver.php",
+            "src/Resources/config/services.yaml"
+          ]
+        },
+        {
+          "package_name": "symfony/console",
+          "version": "^6.4 | ^7.0 | ^8.0",
+          "ecosystem": "composer",
+          "why_relevant": "Required in development for the AsCommand console classes shipped by the bundle.",
+          "linked_capabilities": [
+            "cap.integration.command-registration"
+          ],
+          "evidence": [
+            "composer.json",
+            "src/Command/GenerateDirectiveResolverCommand.php",
+            "src/Command/GenerateFieldResolverCommand.php",
+            "src/Command/GenerateScalarResolverCommand.php",
+            "src/Command/GenerateTypeRegistryCommand.php"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+parameters:
+  level: 6
+  paths:
+    - src
+    - tests
+  excludePaths:
+    analyse:
+      - tests/fixture-app/var/*
+  tmpDir: var/phpstan

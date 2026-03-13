@@ -1,0 +1,380 @@
+{
+  "skills": [
+    {
+      "stable_id": "skill.external.graphql-architect",
+      "name": "graphql-architect",
+      "source_type": "home-shared",
+      "path": null,
+      "description": "Use when designing GraphQL schemas, implementing Apollo Federation, or building real-time subscriptions. Invoke for schema design, resolvers with DataLoader, query optimization, federation directives.",
+      "tags": [
+        "apollo",
+        "federation",
+        "graphql",
+        "schema_design"
+      ],
+      "recommended_for": [
+        "federation_planning",
+        "schema_design",
+        "subscription_design"
+      ],
+      "avoid_for": [
+        "css_design",
+        "mobile_ux"
+      ],
+      "applicability_score": 0.72,
+      "applicability_reasoning": "Repository evidence shows GraphQL schema-first generation with explicit federation support and command/config branches keyed by schema_type=federation.",
+      "availability_certainty": "supplied-only",
+      "trust_level": "capability-metadata",
+      "best_fit_workspaces": [
+        "ws.bundle-core"
+      ],
+      "best_fit_modules": [
+        "mod.generated-code-contract",
+        "mod.bundle-bootstrap",
+        "mod.cache-warming"
+      ],
+      "read_before_using": [
+        "ref.framework.configuration",
+        "ref.runtime.cache-warmer",
+        "ref.doc.setup-guide"
+      ],
+      "paired_reference_ids": [
+        "ref.framework.configuration",
+        "ref.runtime.cache-warmer",
+        "ref.doc.setup-guide"
+      ],
+      "paired_recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.update-integration-entrypoint"
+      ],
+      "invocation_notes": "Best used for federation-specific config, builder selection, or schema generation changes rather than generic PHP service wiring.",
+      "expected_output_shape": "Design notes, schema change plan, and affected bundle/config touchpoints.",
+      "common_failure_modes": [
+        "Assuming a full GraphQL server implementation exists in-repo.",
+        "Ignoring that this repository mainly wires generation into a consumer app."
+      ],
+      "evidence": []
+    },
+    {
+      "stable_id": "skill.external.php-async",
+      "name": "php-async",
+      "source_type": "home-shared",
+      "path": null,
+      "description": "Use when building PHP applications with modern PHP 8.3+ features and async, Symfony frameworks. Invoke for strict typing, PSR standards.",
+      "tags": [
+        "async",
+        "php",
+        "symfony"
+      ],
+      "recommended_for": [
+        "async_php_design",
+        "psr_compliance",
+        "symfony_integration"
+      ],
+      "avoid_for": [
+        "frontend_layout",
+        "react_native"
+      ],
+      "applicability_score": 0.54,
+      "applicability_reasoning": "Repository targets PHP 8.3+ and includes async amphp_v2/amphp_v3 executor configuration branches, but async behavior is configuration-level rather than widely implemented in local code.",
+      "availability_certainty": "supplied-only",
+      "trust_level": "capability-metadata",
+      "best_fit_workspaces": [
+        "ws.bundle-core"
+      ],
+      "best_fit_modules": [
+        "mod.bundle-bootstrap",
+        "mod.generated-code-contract"
+      ],
+      "read_before_using": [
+        "ref.framework.configuration",
+        "ref.framework.extension"
+      ],
+      "paired_reference_ids": [
+        "ref.framework.configuration",
+        "ref.framework.extension"
+      ],
+      "paired_recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.change-service-wiring"
+      ],
+      "invocation_notes": "Use narrowly for executor-related design or strict PHP 8.3 alignment; not for generic GraphQL schema planning.",
+      "expected_output_shape": "Executor/config guidance and Symfony wiring notes.",
+      "common_failure_modes": [
+        "Over-designing async runtime flow beyond the evidence present in the bundle.",
+        "Ignoring that amphp support is mostly selected through config and builder aliases."
+      ],
+      "evidence": []
+    },
+    {
+      "stable_id": "skill.external.php-graphql",
+      "name": "php-graphql",
+      "source_type": "home-shared",
+      "path": null,
+      "description": "Use when working with PHP and GraphQL and Symfony framework bundle flexeble-graphql-bundle.",
+      "tags": [
+        "bundle",
+        "graphql",
+        "php",
+        "symfony"
+      ],
+      "recommended_for": [
+        "bundle_configuration",
+        "php_graphql_integration",
+        "resolver_implementation"
+      ],
+      "avoid_for": [
+        "android_development",
+        "react_client"
+      ],
+      "applicability_score": 0.98,
+      "applicability_reasoning": "The supplied skill explicitly targets this bundle's PHP + GraphQL + Symfony context and aligns with the repository's core purpose and module layout.",
+      "availability_certainty": "supplied-only",
+      "trust_level": "capability-metadata",
+      "best_fit_workspaces": [
+        "ws.bundle-core"
+      ],
+      "best_fit_modules": [
+        "mod.bundle-bootstrap",
+        "mod.cache-warming",
+        "mod.codegen-commands",
+        "mod.default-resolution",
+        "mod.generated-code-contract"
+      ],
+      "read_before_using": [
+        "ref.framework.extension",
+        "ref.framework.configuration",
+        "ref.runtime.cache-warmer",
+        "ref.command.generate-type-registry"
+      ],
+      "paired_reference_ids": [
+        "ref.framework.configuration",
+        "ref.framework.extension",
+        "ref.runtime.cache-warmer",
+        "ref.command.generate-type-registry"
+      ],
+      "paired_recipe_ids": [
+        "recipe.change-config-contract",
+        "recipe.change-service-wiring",
+        "recipe.update-default-resolver",
+        "recipe.debug-generation-runtime-flow"
+      ],
+      "invocation_notes": "Default best-fit skill for most repository tasks. Read config and extension references first to stay aligned with current bundle wiring.",
+      "expected_output_shape": "Bundle-aware implementation plan with touched files, config implications, and consumer validation notes.",
+      "common_failure_modes": [
+        "Treating docs examples as in-repo executable entrypoints.",
+        "Ignoring docs/sample-YAML synchronization when changing config."
+      ],
+      "evidence": []
+    },
+    {
+      "stable_id": "skill.external.php-symfony",
+      "name": "php-symfony",
+      "source_type": "home-shared",
+      "path": null,
+      "description": "Use when building PHP applications with modern PHP 8.3+ features, Symfony frameworks. Invoke for strict typing, PSR standards. PHPStan level 9 compliance guidance available.",
+      "tags": [
+        "php",
+        "phpstan",
+        "psr",
+        "symfony"
+      ],
+      "recommended_for": [
+        "command_and_handler_design",
+        "service_wiring",
+        "symfony_architecture"
+      ],
+      "avoid_for": [
+        "frontend_css",
+        "mobile_native"
+      ],
+      "applicability_score": 0.92,
+      "applicability_reasoning": "Repository is a Symfony bundle with DI extension, console commands, and cache warmer integration, making Symfony service wiring and bundle architecture central.",
+      "availability_certainty": "supplied-only",
+      "trust_level": "capability-metadata",
+      "best_fit_workspaces": [
+        "ws.bundle-core"
+      ],
+      "best_fit_modules": [
+        "mod.bundle-bootstrap",
+        "mod.codegen-commands",
+        "mod.cache-warming",
+        "mod.default-resolution"
+      ],
+      "read_before_using": [
+        "ref.framework.extension",
+        "ref.framework.services-yaml",
+        "ref.runtime.cache-warmer"
+      ],
+      "paired_reference_ids": [
+        "ref.framework.extension",
+        "ref.framework.services-yaml",
+        "ref.runtime.cache-warmer"
+      ],
+      "paired_recipe_ids": [
+        "recipe.change-service-wiring",
+        "recipe.add-cli-codegen-command",
+        "recipe.update-integration-entrypoint"
+      ],
+      "invocation_notes": "Prefer this for DI, command registration, and cache-warmer lifecycle changes. Pair with php-graphql when GraphQL semantics also matter.",
+      "expected_output_shape": "Symfony wiring plan with touched services, commands, tags, and validation approach.",
+      "common_failure_modes": [
+        "Assuming full app kernel structure exists in-repo.",
+        "Ignoring reduced-confidence compiler-pass registration area."
+      ],
+      "evidence": []
+    },
+    {
+      "stable_id": "skill.external.php-tester",
+      "name": "php-tester",
+      "source_type": "home-shared",
+      "path": null,
+      "description": "Use when building PHP applications with modern PHP 8.3+ features, Symfony frameworks. Write comprehensive PHPUnit tests with 80%+ coverage.",
+      "tags": [
+        "php",
+        "phpunit",
+        "symfony",
+        "testing"
+      ],
+      "recommended_for": [
+        "phpunit_guidance",
+        "test_architecture",
+        "unit_testing"
+      ],
+      "avoid_for": [
+        "frontend_ui",
+        "mobile_app_design"
+      ],
+      "applicability_score": 0.62,
+      "applicability_reasoning": "Repository is PHP/Symfony and declares PHPUnit as a dev dependency, but no current in-repo tests or phpunit configuration were found, limiting direct applicability.",
+      "availability_certainty": "supplied-only",
+      "trust_level": "capability-metadata",
+      "best_fit_workspaces": [
+        "ws.bundle-core"
+      ],
+      "best_fit_modules": [
+        "mod.bundle-bootstrap",
+        "mod.codegen-commands",
+        "mod.cache-warming",
+        "mod.default-resolution"
+      ],
+      "read_before_using": [
+        "docs/index/testing.json",
+        "ref.framework.extension",
+        "ref.command.generate-type-registry"
+      ],
+      "paired_reference_ids": [
+        "ref.framework.extension",
+        "ref.command.generate-type-registry"
+      ],
+      "paired_recipe_ids": [
+        "recipe.update-default-resolver",
+        "recipe.add-cli-codegen-command",
+        "recipe.debug-generation-runtime-flow"
+      ],
+      "invocation_notes": "Use for designing new PHPUnit coverage or test scaffolding, but first acknowledge that current repo-local tests are Not found.",
+      "expected_output_shape": "Testing plan and proposed PHPUnit structure aligned to current bundle modules.",
+      "common_failure_modes": [
+        "Assuming existing test fixtures or phpunit.xml are present.",
+        "Proposing consumer-app-only validation as if it were unit tests."
+      ],
+      "evidence": []
+    }
+  ],
+  "omitted_below_threshold": [
+    {
+      "name": "django-expert",
+      "score": 0.0
+    },
+    {
+      "name": "flask-python",
+      "score": 0.0
+    },
+    {
+      "name": "flux-local-best-practices",
+      "score": 0.0
+    },
+    {
+      "name": "frontend-design",
+      "score": 0.0
+    },
+    {
+      "name": "game-developer",
+      "score": 0.0
+    },
+    {
+      "name": "golang-pro",
+      "score": 0.0
+    },
+    {
+      "name": "javascript-patterns",
+      "score": 0.0
+    },
+    {
+      "name": "javascript-testing-patterns",
+      "score": 0.0
+    },
+    {
+      "name": "nodejs-backend-patterns",
+      "score": 0.0
+    },
+    {
+      "name": "php-evgen",
+      "score": 0.46
+    },
+    {
+      "name": "python-pro",
+      "score": 0.0
+    },
+    {
+      "name": "react-best-practices",
+      "score": 0.0
+    },
+    {
+      "name": "react-composition-patterns",
+      "score": 0.0
+    },
+    {
+      "name": "react-graphql",
+      "score": 0.0
+    },
+    {
+      "name": "react-native-skills",
+      "score": 0.0
+    },
+    {
+      "name": "react-tester",
+      "score": 0.0
+    },
+    {
+      "name": "react-web",
+      "score": 0.0
+    },
+    {
+      "name": "sql-pro",
+      "score": 0.0
+    },
+    {
+      "name": "tailwind-design-system",
+      "score": 0.0
+    },
+    {
+      "name": "typescript-types",
+      "score": 0.0
+    }
+  ],
+  "repository_discovered_skills": "Not found",
+  "evidence": [
+    "README.md",
+    "composer.json",
+    "docs/index.md",
+    "src/CacheWarmer/SchemaCacheWarmer.php",
+    "src/Command/GenerateDirectiveResolverCommand.php",
+    "src/Command/GenerateFieldResolverCommand.php",
+    "src/Command/GenerateScalarResolverCommand.php",
+    "src/Command/GenerateTypeRegistryCommand.php",
+    "src/DependencyInjection/Configuration.php",
+    "src/DependencyInjection/FlexibleGraphqlExtension.php",
+    "src/Resolver/DefaultResolver.php"
+  ]
+}

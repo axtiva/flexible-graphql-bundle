@@ -1,0 +1,156 @@
+{
+  "impacts": [
+    {
+      "id": "impact.config-contract-sync",
+      "trigger_paths": [
+        "src/DependencyInjection/Configuration.php"
+      ],
+      "likely_related_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap",
+        "mod.generated-code-contract",
+        "mod.consumer-guidance"
+      ],
+      "related_tests": "Not found",
+      "reason": "Configuration.php is the source of truth for consumer options, but sample YAML and docs duplicate those options and the extension consumes them for runtime behavior.",
+      "confidence": 0.98,
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    },
+    {
+      "id": "impact.command-registration-sync",
+      "trigger_paths": [
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php"
+      ],
+      "likely_related_paths": [
+        "README.md",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "related_modules": [
+        "mod.codegen-commands",
+        "mod.bundle-bootstrap",
+        "mod.consumer-guidance"
+      ],
+      "related_tests": "Not found",
+      "reason": "Command classes are explicitly registered in FlexibleGraphqlExtension and README documents the command namespace for consumers.",
+      "confidence": 0.97,
+      "evidence": [
+        "README.md",
+        "src/Command/GenerateDirectiveResolverCommand.php",
+        "src/Command/GenerateFieldResolverCommand.php",
+        "src/Command/GenerateScalarResolverCommand.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ]
+    },
+    {
+      "id": "impact.cache-warmer-generation-sync",
+      "trigger_paths": [
+        "src/CacheWarmer/SchemaCacheWarmer.php"
+      ],
+      "likely_related_paths": [
+        "README.md",
+        "docs/index.md",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/DependencyInjection/Configuration.php"
+      ],
+      "related_modules": [
+        "mod.cache-warming",
+        "mod.codegen-commands",
+        "mod.generated-code-contract"
+      ],
+      "related_tests": "Not found",
+      "reason": "Cache warm is the documented generation workflow, shares config and builders with the explicit type-registry command, and affects consumer docs.",
+      "confidence": 0.96,
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/CacheWarmer/SchemaCacheWarmer.php",
+        "src/Command/GenerateTypeRegistryCommand.php",
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "id": "impact.default-resolver-alias-sync",
+      "trigger_paths": [
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml"
+      ],
+      "likely_related_paths": [
+        "README.md",
+        "src/DependencyInjection/Configuration.php"
+      ],
+      "related_modules": [
+        "mod.default-resolution",
+        "mod.bundle-bootstrap"
+      ],
+      "related_tests": "Not found",
+      "reason": "The default resolver implementation and its service alias are tied to the default_resolver config option documented for consumers.",
+      "confidence": 0.9,
+      "evidence": [
+        "README.md",
+        "src/Resolver/DefaultResolver.php",
+        "src/Resources/config/services.yaml",
+        "src/DependencyInjection/Configuration.php"
+      ]
+    },
+    {
+      "id": "impact.compiler-pass-uncertainty",
+      "trigger_paths": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php"
+      ],
+      "likely_related_paths": [
+        "src/FlexibleGraphqlBundle.php"
+      ],
+      "related_modules": [
+        "mod.bundle-bootstrap"
+      ],
+      "related_tests": "Not found",
+      "reason": "FlexibleGraphqlExtension implements CompilerPassInterface and contains process()-time resolver tagging logic, but the Bundle class does not show local build() registration evidence.",
+      "confidence": 0.58,
+      "evidence": [
+        "src/DependencyInjection/FlexibleGraphqlExtension.php",
+        "src/FlexibleGraphqlBundle.php"
+      ]
+    },
+    {
+      "id": "impact.consumer-doc-runtime-boundary",
+      "trigger_paths": [
+        "docs/index.md",
+        "README.md"
+      ],
+      "likely_related_paths": [
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ],
+      "related_modules": [
+        "mod.consumer-guidance",
+        "mod.generated-code-contract"
+      ],
+      "related_tests": "Not found",
+      "reason": "Consumer docs duplicate config examples and define the runtime boundary between this bundle and host-app HTTP code, so doc changes can materially affect downstream implementation understanding.",
+      "confidence": 0.88,
+      "evidence": [
+        "README.md",
+        "docs/index.md",
+        "src/DependencyInjection/Configuration.php",
+        "src/Resources/config/flexible_graphql.yaml"
+      ]
+    }
+  ]
+}

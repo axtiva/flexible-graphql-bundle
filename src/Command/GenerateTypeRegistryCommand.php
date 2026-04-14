@@ -31,7 +31,7 @@ class GenerateTypeRegistryCommand extends Command
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('generate type registry class for lazy load schema')

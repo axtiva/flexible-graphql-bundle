@@ -260,28 +260,28 @@ class FlexibleGraphqlExtension extends Extension implements CompilerPassInterfac
                 new Reference(TypeRegistryGeneratorBuilderInterface::class),
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
-            ->addTag('console.command', ['command' => GenerateTypeRegistryCommand::getDefaultName()]);
+            ->addTag('console.command');
 
         $container->register(GenerateDirectiveResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
-            ->addTag('console.command', ['command' => GenerateDirectiveResolverCommand::getDefaultName()]);
+            ->addTag('console.command');
 
         $container->register(GenerateFieldResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
-            ->addTag('console.command', ['command' => GenerateFieldResolverCommand::getDefaultName()]);
+            ->addTag('console.command');
 
         $container->register(GenerateScalarResolverCommand::class)
             ->setArguments([
                 $config['schema_files'],
                 new Reference(CodeGeneratorBuilderInterface::class),
             ])
-            ->addTag('console.command', ['command' => GenerateScalarResolverCommand::getDefaultName()]);
+            ->addTag('console.command');
     }
 
     /**

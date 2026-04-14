@@ -15,7 +15,7 @@
   },
   "require": {
     "php": "^8.3",
-    "axtiva/flexible-graphql-php": "^3.0.1",
+    "axtiva/flexible-graphql-php": "^3.0.2",
     "symfony/console": "^6.4 | ^7.0 | ^8.0",
     "symfony/config": "^6.4 | ^7.0 | ^8.0",
     "symfony/dependency-injection": "^6.4 | ^7.0 | ^8.0",
@@ -26,6 +26,10 @@
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^12"
+    "phpunit/phpunit": "^12",
+    "amphp/amp": "^3"
+  },
+  "suggest": {
+    "amphp/amp": "Needed for async execution support"
   }
 }

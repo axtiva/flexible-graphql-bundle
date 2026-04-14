@@ -62,6 +62,22 @@ final class FixtureAppConsoleTest extends TestCase
         self::assertStringContainsString('directive_federation__shareable', $registryCode);
     }
 
+    public function testFixtureAppGenerationSupportsAmphpV3Executor(): void
+    {
+        $registryFile = self::fixtureAppDir() . '/var/generated/TypeRegistry.php';
+
+        $this->runConsoleCommand('flexible_graphql:generate-type-registry', [
+            'FLEXIBLE_GRAPHQL_EXECUTOR' => 'amphp_v3',
+            'FLEXIBLE_GRAPHQL_SCHEMA_TYPE' => 'graphql',
+        ]);
+        self::assertFileExists($registryFile);
+
+        $registryCode = (string) file_get_contents($registryFile);
+        self::assertStringContainsString('\Amp\async(', $registryCode, 'AMP v3 executor must wrap resolvers with \Amp\async()');
+        self::assertStringNotContainsString('\Amp\call(', $registryCode, 'AMP v3 executor must not use \Amp\call() (that is the v2 API)');
+        self::assertStringContainsString('ServiceCollectionInterface', $registryCode);
+    }
+
     public function testGeneratedTypeRegistryUsesScopedLocatorOnly(): void
     {
         $registryFile = self::fixtureAppDir() . '/var/generated/TypeRegistry.php';
@@ -84,7 +100,6 @@ final class FixtureAppConsoleTest extends TestCase
         self::assertSame(ServiceCollectionInterface::class, $constructorType->getName());
 
         $getService = new ReflectionMethod($registryClass, 'getService');
-        $getService->setAccessible(true);
 
         self::assertIsObject($getService->invoke($registry, $serviceId));
 

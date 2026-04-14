@@ -91,6 +91,7 @@ final class FlexibleGraphqlExtensionTest extends TestCase
     {
         yield 'sync graphql' => ['graphql', 'sync', TypeRegistryGeneratorBuilder::class, null];
         yield 'amphp v2 graphql' => ['graphql', 'amphp_v2', TypeRegistryGeneratorBuilder::class, TypeRegistryGeneratorBuilderAmphpV2::class];
+        yield 'amphp v3 graphql' => ['graphql', 'amphp_v3', TypeRegistryGeneratorBuilder::class, TypeRegistryGeneratorBuilderAmphp::class];
         yield 'amphp v3 federation' => ['federation', 'amphp_v3', TypeRegistryGeneratorBuilderFederated::class, TypeRegistryGeneratorBuilderAmphp::class];
     }
 

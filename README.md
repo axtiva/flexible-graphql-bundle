@@ -8,6 +8,7 @@ Symfony bundle for [Flexible Graphql PHP](https://github.com/axtiva/flexible-gra
 - Fast integration to any project without breaking changes
 - Lazy loading on schema definition
 - Apollo Federation Support
+- Amphp v3 support for async executions
 - Executable directives
 - Support symfony native opcache preload file generation
 

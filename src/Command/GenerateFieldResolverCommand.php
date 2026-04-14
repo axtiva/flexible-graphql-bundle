@@ -29,7 +29,7 @@ class GenerateFieldResolverCommand extends Command
         $this->codeGeneratorBuilder = $codeGeneratorBuilder;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('generate field resolver')

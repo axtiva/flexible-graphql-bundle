@@ -1,3 +1,9 @@
+3.1.0
+
+- extend php version support
+- add support php v8.3+
+- integrate ampphp executor
+
 3.0.0
 
 - Upgrade base lib to 3.0 with breaking changes

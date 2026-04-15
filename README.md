@@ -51,6 +51,12 @@ Quick install [guide](docs/index.md)
 bin/console list flexible_graphql
 ```
 
+## Async execution
+
+Currently, the bundle supports async execution of resolvers using amphp v3. 
+Read in [docs/async.md](docs/async.md) how to use it.
+
+
 ## Tests
 
 Run tests

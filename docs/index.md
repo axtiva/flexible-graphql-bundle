@@ -27,9 +27,6 @@ flexible_graphql:
 
 ```yaml
 services:
-  # Provided by the bundle. Used by generated TypeRegistry constructor.
-  flexible_graphql.type_registry.service_locator: ~
-
   App\GraphQL\TypeRegistry:
     arguments:
       $locator: '@flexible_graphql.type_registry.service_locator'
